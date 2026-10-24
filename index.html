@@ -336,6 +336,8 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media print{.skip-link,.demo-toolbar{display:none!important}html{color-scheme:light}body{background:#fff;color:#17281c}.print-content .schedule-table .subject{font-size:1em}.print-content .schedule-table .teacher{font-size:.84em}.print-content .schedule-table th{font-size:inherit}}
 
+@media print{.print-content .capacity-reason{display:none!important}}
+
 /* Grade and personal attendance controls. */
 .grade-settings{border:1px solid var(--line);border-radius:16px;margin:0;padding:0;min-width:0;background:var(--surface)}
 .grade-settings>summary{display:flex;align-items:center;gap:10px;padding:16px;list-style:none;cursor:pointer;font-size:14px;font-weight:bold;min-height:54px;border-radius:16px}
@@ -1087,8 +1089,9 @@ function renderGeneratedSchedule(){
  $('masterTable').innerHTML=masterTable(generated);const selected=$('classSelect').value;$('classSelect').innerHTML=generated.classes.map(c=>`<option value="${c.id}">${escapeHTML(c.title)}</option>`).join('');if(generated.classes.some(c=>c.id===selected))$('classSelect').value=selected;renderSub();$('largeScheduleNote').hidden=false;$('largeScheduleNote').textContent=generated.classes.length>18?'الجدول الرئيسي كامل في الصفحة الأولى. لكثرة الشعب سيكون الخط أصغر، ويمكن قراءة كل شعبة بوضوح في صفحتها التالية.':'تحميل PDF يجمع الجدول الرئيسي في الصفحة الأولى، ثم جميع جداول الصفوف في الملف نفسه.';switchTab(currentTab);syncPrintStatus();
 }
 function gapReason(reason){return({'unplanned':'لم تحدد المادة','missing-teacher':'دون أستاذ','teacher-capacity':'لا تكفي حصص الكادر ضمن أيام الدوام المحددة'})[reason]||'غير مكتملة';}
-function presentCell(cell){if(cell._presented)return cell;return cell.unassigned?{...cell,_presented:true,subject:cell.plannedSubject||'غير محددة',teacher:gapReason(cell.reason)}:cell.extra?{...cell,_presented:true,teacher:`${cell.teacher} · إضافية`}:cell;}
-function cellHTML(cell,withTeacher){const c=presentCell(cell);return `<span class="subject ${cell.unassigned?'unassigned':''}">${escapeHTML(c.subject)}</span>${withTeacher||cell.unassigned?`<span class="teacher ${cell.unassigned?'unassigned':''}">${escapeHTML(c.teacher)}</span>`:cell.extra?'<span class="extra-label">إسناد إضافي</span>':''}`;}
+function presentCell(cell){if(cell._presented)return cell;return cell.unassigned?{...cell,_presented:true,subject:cell.plannedSubject||'غير محددة',teacher:gapReason(cell.reason)}:cell;}
+function presentPdfCell(cell){const shown=presentCell(cell);return cell.unassigned&&cell.reason==='teacher-capacity'?{...shown,teacher:''}:shown;}
+function cellHTML(cell,withTeacher){const c=presentCell(cell);return `<span class="subject ${cell.unassigned?'unassigned':''}">${escapeHTML(c.subject)}</span>${withTeacher||cell.unassigned?`<span class="teacher ${cell.unassigned?'unassigned':''}${cell.unassigned&&cell.reason==='teacher-capacity'?' capacity-reason':''}">${escapeHTML(c.teacher)}</span>`:''}`;}
 function timetableRows(result){return days.flatMap((day,d)=>getPeriods(result.config).map((period,p)=>({day,dayIndex:d,period,periodIndex:p})));}
 function masterTable(result,options={}){
  const classes=options.classes||result.classes,entries=options.rows||timetableRows(result);let rows='';
@@ -1486,7 +1489,7 @@ let pdfExportBusy=false;
 function pdfMeta(config,createdAt){const date=new Date(createdAt);const year=date.getFullYear()-(date.getMonth()<8?1:0);return{schoolName:config.schoolName||'المدرسة',principalName:config.principalName||'....................',stage:curriculum[config.stage].name,year:`${year} – ${year+1}`,date:date.toLocaleDateString('ar-IQ',{timeZone:'Asia/Baghdad'})}}
 function buildMasterPdfSpecs(result,meta){
  const periods=getPeriods(result.config),classes=result.classes,entries=timetableRows(result),height=141/entries.length;
- const rows=entries.map(row=>({...row,height,cells:classes.map(cls=>result.data[row.dayIndex][cls.id][row.periodIndex])}));
+ const rows=entries.map(row=>({...row,height,cells:classes.map(cls=>presentPdfCell(result.data[row.dayIndex][cls.id][row.periodIndex]))}));
  return[{kind:'master',meta,title:'الجدول الرئيسي الشامل',classes:classes.map(c=>c.title),classIds:classes.map(c=>c.id),periods:[...periods],rows,fontSize:9,partLabel:`جميع الصفوف والشعب · ${classes.length} صفًا وشعبة · الأسبوع كاملًا في صفحة واحدة`}];
 }
 function buildRosterPdfSpecs(record=validStudentDistribution()){
@@ -1505,7 +1508,7 @@ function buildRosterPdfSpecs(record=validStudentDistribution()){
 }
 function buildTimetablePdfSpecs(result){
  const meta=pdfMeta(result.config,result.createdAt),labels=getPeriods(result.config);
- const classes=result.classes.map(cls=>({kind:'class',meta,title:'جدول الدروس الأسبوعي',banner:cls.title,periods:[...labels],rows:days.map((day,d)=>[day,...result.data[d][cls.id].map(cell=>{const c=presentCell(cell);return cell.unassigned?`${c.subject}\n${c.teacher}`:cell.extra?`${c.subject}\nإسناد إضافي`:c.subject;})])}));
+ const classes=result.classes.map(cls=>({kind:'class',meta,title:'جدول الدروس الأسبوعي',banner:cls.title,periods:[...labels],rows:days.map((day,d)=>[day,...result.data[d][cls.id].map(cell=>{const c=presentPdfCell(cell);return cell.unassigned&&c.teacher?`${c.subject}\n${c.teacher}`:c.subject;})])}));
  return [...buildMasterPdfSpecs(result,meta),...classes];
 }
 function buildPdfPageSpecs(){if(currentPanel==='students')return buildRosterPdfSpecs();return generated&&!isStale&&!quotaInputInvalid?buildTimetablePdfSpecs(generated):[];}
@@ -1537,7 +1540,7 @@ function pdfText(ctx,value,x,y,w,h,pt=9,options={}){
  return{pointSize:size,lines:plan.lines,measuredWidth:plan.measuredWidth,availableWidth:width};
 }
 function pdfRichLayout(ctx,cell,w,pt){
- cell=presentCell(cell);
+ cell=presentPdfCell(cell);
  const scale=PDF_MM_SCALE,pad=.32*scale,width=Math.max(1,w*scale-2*pad),gap=.1*scale;
  ctx.direction='rtl';pdfFont(ctx,pt,true);const subject=pdfWrap(ctx,cell.subject,width);pdfFont(ctx,pt*.84);const teacher=pdfWrap(ctx,cell.teacher,width),line=pt*scale*25.4/72*1.12;
  return{subject,teacher,line,height:subject.length*line+teacher.length*line*.84+gap};
@@ -1548,7 +1551,7 @@ function fitPdfRichLayout(ctx,cell,w,h,pt=9){
  return{size,plan,pad,height};
 }
 function pdfRichCell(ctx,cell,x,y,w,h,pt){
- cell=presentCell(cell);
+ cell=presentPdfCell(cell);
  const scale=PDF_MM_SCALE,{size,plan,pad,height}=fitPdfRichLayout(ctx,cell,w,h,pt);
  ctx.textAlign='center';ctx.direction='rtl';ctx.textBaseline='middle';let ty=y*scale+pad+(height-plan.height)/2;
  pdfFont(ctx,size,true);ctx.fillStyle='#172f20';for(const line of plan.subject){ctx.fillText(line,(x+w/2)*scale,ty+plan.line/2);ty+=plan.line;}
