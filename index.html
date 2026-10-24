@@ -336,6 +336,35 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media print{.skip-link,.demo-toolbar{display:none!important}html{color-scheme:light}body{background:#fff;color:#17281c}.print-content .schedule-table .subject{font-size:1em}.print-content .schedule-table .teacher{font-size:.84em}.print-content .schedule-table th{font-size:inherit}}
 
+/* Grade and personal attendance controls. */
+.grade-settings{border:1px solid var(--line);border-radius:16px;margin:0;padding:0;min-width:0;background:var(--surface)}
+.grade-settings>summary{display:flex;align-items:center;gap:10px;padding:16px;list-style:none;cursor:pointer;font-size:14px;font-weight:bold;min-height:54px;border-radius:16px}
+.grade-settings>summary::-webkit-details-marker{display:none}
+.grade-settings>summary::after{content:'';width:8px;height:8px;border-right:2px solid var(--primary);border-bottom:2px solid var(--primary);transform:rotate(45deg);flex-shrink:0;margin-inline:4px}
+.grade-settings[open]>summary::after{transform:rotate(225deg)}
+.grade-settings>summary:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.grade-settings[open]>summary{border-bottom:1px solid var(--line);border-radius:16px 16px 0 0;margin-bottom:14px}
+.grade-selection-count{margin-inline-start:auto;white-space:nowrap;font-weight:normal;font-size:12px;color:var(--primary-dark);background:var(--tonal);padding:3px 9px;border-radius:20px}
+.grade-settings-body{padding:0 16px 16px;max-height:420px;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin}
+
+.teacher-availability{border:1px solid var(--line);border-radius:16px;padding:16px;margin:0;min-width:0}
+.teacher-availability legend{font-size:14px;font-weight:bold;padding:0 7px}
+.grade-settings-body>p,.teacher-availability>small{font-size:12px;display:block;margin:0 0 12px}
+.grade-selection-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.grade-selection-actions .btn{font-size:12px;padding:8px 12px;min-height:40px;white-space:normal}
+.school-grades-selector{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.grade-option,.work-day-option{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface);font-size:12px;cursor:pointer;min-height:44px}
+.grade-option:has(input:checked),.work-day-option:has(input:checked){border-color:var(--primary);background:var(--tonal);color:var(--primary-dark)}
+.grade-option input,.work-day-option input{margin:0;width:19px;height:19px;min-height:19px;flex:0 0 19px;padding:0}
+#gradeSelectionStatus{margin:12px 0 0;color:var(--ink)}
+.teacher-availability{margin:6px 0 20px}
+.teacher-work-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.work-day-option{font-size:13px}
+.teacher-availability>small{line-height:1.8;margin-bottom:4px}
+.teacher-attendance{border-top:1px solid var(--line);padding-top:12px;margin:14px 0 10px;font-size:12px;color:var(--ink)}
+.teacher-attendance span{color:var(--muted)}
+@media screen{.muted,small,.eyebrow,.topbar-title{color:var(--muted)}:root{--muted:#52675d}html[data-theme="dark"]{--muted:#b6c9bf}.page-heading p{font-size:13px}.card-heading small{font-size:12px}.step{font-size:12px}.weekly-row label{font-size:13px}}
+@media(max-width:700px){.teacher-work-days{grid-template-columns:repeat(2,minmax(0,1fr))}.grade-settings>summary{padding:14px 12px}.grade-settings-body{padding:0 12px 12px}.school-grades-selector{grid-template-columns:1fr}.grade-option{font-size:13px}.step{font-size:10px}.grade-settings-body>p{font-size:12px}.card-heading small{font-size:11px}.teacher-attendance{font-size:12px}}
 </style>
 </head>
 <body>
@@ -383,7 +412,7 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
   <div class="page-heading"><div><div class="eyebrow">البداية المرتبة</div><h1 id="schoolTitle" tabindex="-1">لنبدأ بمدرستك</h1><p>اختر المرحلة والشعب، ثم أضف الأساتذة.</p></div></div>
   <div class="steps" aria-label="خطوات إعداد الجدول"><span class="step current"><i>1</i>بيانات المدرسة</span><span class="step-line"></span><span class="step"><i>2</i>إضافة الأساتذة</span><span class="step-line"></span><span class="step"><i>3</i>التوليد وPDF</span></div>
   <div class="setup-layout"><div><div class="card"><div class="card-heading"><span class="icon-tile"><svg class="icon"><use href="#i-school"/></svg></span><div><h2>معلومات المدرسة</h2><small>ستظهر هذه البيانات أعلى الجداول المطبوعة</small></div></div>
-   <form id="schoolForm"><div class="form-grid"><div class="field span-2"><label for="schoolName">اسم المدرسة</label><input id="schoolName" maxlength="100" placeholder="مثال: مدرسة دجلة الابتدائية للبنين" autocomplete="organization"></div><div class="field"><label for="schoolStage">المرحلة الدراسية</label><select id="schoolStage"><option value="primary">المرحلة الابتدائية</option><option value="intermediate">المرحلة المتوسطة</option><option value="preparatory">المرحلة الإعدادية</option></select></div><div class="field"><label for="principalName">اسم مدير المدرسة <span class="muted">(اختياري)</span></label><input id="principalName" maxlength="80" placeholder="الاسم الذي يظهر في التوقيع" autocomplete="name"></div><div class="span-2 switch-row"><label for="hasSixthPeriod"><span><strong>تفعيل الحصة السادسة</strong><small>الافتراضي 5 حصص يوميًا. فعّل الخيار للعمل بست حصص.</small></span><input class="switch-input" type="checkbox" role="switch" id="hasSixthPeriod"></label></div><div class="span-2 switch-row"><label for="hasSections"><span><strong>توجد شعب متعددة</strong><small>فعّل هذا الخيار إذا كانت الصفوف مقسّمة إلى أ، ب، ج...</small></span><input class="switch-input" type="checkbox" role="switch" id="hasSections"></label></div><div class="field span-2" id="sectionsField" hidden><label for="sectionsCount">عدد موحّد لجميع صفوف المرحلة</label><select id="sectionsCount"><option value="1">شعبة واحدة · أ</option><option value="2">شعبتان · أ، ب</option><option value="3">3 شعب · أ، ب، ج</option><option value="4">4 شعب · أ، ب، ج، د</option><option value="5">5 شعب · أ، ب، ج، د، هـ</option><option value="6">6 شعب · أ، ب، ج، د، هـ، و</option></select><small>تغيير هذا العدد يطبّقه على جميع الصفوف. يمكنك تخصيص كل صف أدناه.</small></div><details class="span-2 grade-sections-dropdown" id="perGradeSections" hidden><summary>تخصيص عدد الشعب لكل صف</summary><div id="gradeSectionsList" class="grade-sections-list"></div></details></div></form>
+   <form id="schoolForm"><div class="form-grid"><div class="field span-2"><label for="schoolName">اسم المدرسة</label><input id="schoolName" maxlength="100" placeholder="مثال: مدرسة دجلة الابتدائية للبنين" autocomplete="organization"></div><div class="field"><label for="schoolStage">المرحلة الدراسية</label><select id="schoolStage"><option value="primary">المرحلة الابتدائية</option><option value="intermediate">المرحلة المتوسطة</option><option value="preparatory">المرحلة الإعدادية</option><option value="secondary">المرحلة الثانوية (متوسطة وإعدادية)</option></select></div><div class="field"><label for="principalName">اسم مدير المدرسة <span class="muted">(اختياري)</span></label><input id="principalName" maxlength="80" placeholder="الاسم الذي يظهر في التوقيع" autocomplete="name"></div><details class="span-2 grade-settings" id="activeGradesDropdown"><summary><span>الصفوف المفعّلة في المدرسة</span><span class="grade-selection-count" id="gradeSelectionCount"></span></summary><div class="grade-settings-body"><p class="muted">ألغِ الصفوف غير الموجودة. تُحفظ بياناتها، وتُستبعد من الجداول والتوزيع حتى تفعيلها مجددًا.</p><div class="grade-selection-actions" id="gradeSelectionActions"></div><div id="schoolGradesSelector" class="school-grades-selector"></div><p id="gradeSelectionStatus" class="muted" role="status" aria-live="polite"></p></div></details><div class="span-2 switch-row"><label for="hasSixthPeriod"><span><strong>تفعيل الحصة السادسة</strong><small>الافتراضي 5 حصص يوميًا. فعّل الخيار للعمل بست حصص.</small></span><input class="switch-input" type="checkbox" role="switch" id="hasSixthPeriod"></label></div><div class="span-2 switch-row"><label for="hasSections"><span><strong>توجد شعب متعددة</strong><small>فعّل هذا الخيار إذا كانت الصفوف مقسّمة إلى أ، ب، ج...</small></span><input class="switch-input" type="checkbox" role="switch" id="hasSections"></label></div><div class="field span-2" id="sectionsField" hidden><label for="sectionsCount">عدد موحّد لجميع صفوف المرحلة</label><select id="sectionsCount"><option value="1">شعبة واحدة · أ</option><option value="2">شعبتان · أ، ب</option><option value="3">3 شعب · أ، ب، ج</option><option value="4">4 شعب · أ، ب، ج، د</option><option value="5">5 شعب · أ، ب، ج، د، هـ</option><option value="6">6 شعب · أ، ب، ج، د، هـ، و</option></select><small>تغيير هذا العدد يطبّقه على جميع الصفوف. يمكنك تخصيص كل صف أدناه.</small></div><details class="span-2 grade-sections-dropdown" id="perGradeSections" hidden><summary>تخصيص عدد الشعب لكل صف</summary><div id="gradeSectionsList" class="grade-sections-list"></div></details></div></form>
    </div></div>
    <aside class="card summary-card"><span class="pill"><svg class="icon"><use href="#i-spark"/></svg>لمحة عن مدرستك</span><div class="stats"><div class="stat"><div class="summary-number" id="gradeCount">6</div><small>صفوف دراسية</small></div><div class="stat"><div class="summary-number" id="classCount">6</div><small>صفوف مع الشعب</small></div><div class="stat"><div class="summary-number">5</div><small>أيام في الأسبوع</small></div><div class="stat"><div class="summary-number" id="periodCount">5</div><small>حصص في اليوم</small></div></div><h3 style="font-size:12px">صفوف المرحلة</h3><div class="grade-preview" id="stageGradesPreview"></div><p class="summary-note">جدول رئيسي للإدارة، وجدول مستقل لكل صف وشعبة.</p></aside>
   </div>
@@ -419,7 +448,7 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
 <nav class="bottom-nav" aria-label="التنقل على الهاتف"><button class="active" data-panel="school"><span><svg class="icon"><use href="#i-school"/></svg></span>المدرسة</button><button data-panel="teachers"><span><svg class="icon"><use href="#i-users"/></svg></span>الأساتذة</button><button data-panel="students"><span><svg class="icon"><use href="#i-student"/></svg></span>الطلبة</button><button data-panel="schedules"><span><svg class="icon"><use href="#i-grid"/></svg></span>الجداول</button><button type="button" class="promo-nav-button" id="openAcademicPromo" aria-haspopup="dialog" aria-controls="academicPromoDialog"><span><svg class="icon" aria-hidden="true"><use href="#i-promo-telegram"/></svg></span>قناة تليجرام</button></nav>
 
 
-<dialog id="teacherDialog" aria-labelledby="teacherDialogTitle"><div class="dialog-head"><div><h2 id="teacherDialogTitle" tabindex="-1" autofocus>إضافة أستاذ</h2><small>الاسم والمادة يكفيان للبدء</small></div><button class="icon-only" data-close="teacherDialog" aria-label="إغلاق نافذة الأستاذ"><svg class="icon"><use href="#i-close"/></svg></button></div><form id="teacherForm"><div class="dialog-body"><div class="field"><label for="teacherPersonSelect">الأستاذ</label><select id="teacherPersonSelect"><option value="new">أستاذ جديد</option></select><small>لإضافة مادة أخرى للأستاذ نفسه، اختر اسمه من هذه القائمة لتجنب تعارض حصصه.</small></div><div class="field"><label for="teacherNameInput">اسم الأستاذ / المعلم</label><input id="teacherNameInput" required maxlength="80" placeholder="مثال: أ. حيدر الكاظمي" autocomplete="off"></div><div class="field"><label for="subjectSelect">المادة الدراسية</label><select id="subjectSelect"></select></div><details id="teacherAssignmentsDetails" class="teacher-assignment-options"><summary>تحديد الشعب يدويًا (اختياري)</summary><div class="row between"><span class="field-label">الشعب المفضلة للأستاذ</span><button type="button" class="select-all" id="selectAllGrades">تحديد الكل</button></div><div class="grade-chips" id="gradesSelector" role="group" aria-label="الصفوف والشعب التي يدرسها الأستاذ"></div></details><p class="error" id="teacherError" role="alert" hidden></p><div class="note" style="margin-top:20px"><svg class="icon"><use href="#i-info"/></svg><p id="teacherAssignmentHint">سيُسند الأستاذ تلقائيًا إلى حصص مادته حسب تفرغه.</p></div></div><div class="dialog-actions"><button type="button" class="btn outline" data-close="teacherDialog">إلغاء</button><button type="submit" class="btn" id="saveTeacher"><svg class="icon"><use href="#i-check"/></svg>حفظ الأستاذ</button></div></form></dialog>
+<dialog id="teacherDialog" aria-labelledby="teacherDialogTitle"><div class="dialog-head"><div><h2 id="teacherDialogTitle" tabindex="-1" autofocus>إضافة أستاذ</h2><small>الاسم والمادة يكفيان للبدء</small></div><button class="icon-only" data-close="teacherDialog" aria-label="إغلاق نافذة الأستاذ"><svg class="icon"><use href="#i-close"/></svg></button></div><form id="teacherForm"><div class="dialog-body"><div class="field"><label for="teacherPersonSelect">الأستاذ</label><select id="teacherPersonSelect"><option value="new">أستاذ جديد</option></select><small>لإضافة مادة أخرى للأستاذ نفسه، اختر اسمه من هذه القائمة لتجنب تعارض حصصه.</small></div><div class="field"><label for="teacherNameInput">اسم الأستاذ / المعلم</label><input id="teacherNameInput" required maxlength="80" placeholder="مثال: أ. حيدر الكاظمي" autocomplete="off"></div><div class="field"><label for="subjectSelect">المادة الدراسية</label><select id="subjectSelect"></select></div><fieldset class="teacher-availability"><legend>أيام دوام الأستاذ</legend><div class="field"><label for="teacherMaxDays">عدد أيام الدوام الأقصى في الأسبوع</label><select id="teacherMaxDays"><option value="5">5 أيام · الدوام الكامل</option><option value="4">4 أيام كحد أقصى</option><option value="3">3 أيام كحد أقصى</option><option value="2">يومان كحد أقصى</option><option value="1">يوم واحد كحد أقصى</option></select></div><div id="teacherWorkDays" class="teacher-work-days"></div><small id="teacherDaysHint">اختر أيام الحضور؛ لن توزّع حصص الأستاذ خارجها.</small><small>يسري هذا الإعداد على جميع مواد الأستاذ نفسه.</small></fieldset><details id="teacherAssignmentsDetails" class="teacher-assignment-options"><summary>تحديد الشعب يدويًا (اختياري)</summary><div class="row between"><span class="field-label">الشعب المفضلة للأستاذ</span><button type="button" class="select-all" id="selectAllGrades">تحديد الكل</button></div><div class="grade-chips" id="gradesSelector" role="group" aria-label="الصفوف والشعب التي يدرسها الأستاذ"></div></details><p class="error" id="teacherError" role="alert" hidden></p><div class="note" style="margin-top:20px"><svg class="icon"><use href="#i-info"/></svg><p id="teacherAssignmentHint">سيُسند الأستاذ تلقائيًا إلى حصص مادته حسب تفرغه.</p></div></div><div class="dialog-actions"><button type="button" class="btn outline" data-close="teacherDialog">إلغاء</button><button type="submit" class="btn" id="saveTeacher"><svg class="icon"><use href="#i-check"/></svg>حفظ الأستاذ</button></div></form></dialog>
 <dialog id="confirmDialog" aria-labelledby="confirmTitle"><div class="dialog-head"><h2 id="confirmTitle" tabindex="-1" autofocus>مسح بيانات الأساتذة؟</h2></div><div class="dialog-body"><p id="confirmClearMessage" class="muted" style="font-size:12px">ستُمسح بيانات الأساتذة في المرحلة الحالية. يمكنك التراجع مباشرة بعد المسح.</p></div><div class="dialog-actions"><button class="btn outline" data-close="confirmDialog">إلغاء</button><button class="btn danger" id="confirmClear">مسح بيانات</button></div></dialog>
 <dialog id="academicPromoDialog" class="academic-promo" aria-labelledby="academicPromoTitle" aria-describedby="academicPromoDescription">
  <div class="dialog-head promo-head">
@@ -457,7 +486,8 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
 <div id="printRoot" aria-hidden="true"></div>
 <script>
 'use strict';
-const curriculum={primary:{name:'المرحلة الابتدائية',grades:['الأول الابتدائي','الثاني الابتدائي','الثالث الابتدائي','الرابع الابتدائي','الخامس الابتدائي','السادس الابتدائي'],subjects:['التربية الإسلامية','قراءتي / اللغة العربية','اللغة الإنجليزية','الرياضيات','العلوم','الاجتماعيات','التربية الأخلاقية','التربية الفنية','التربية الرياضية']},intermediate:{name:'المرحلة المتوسطة',grades:['الأول المتوسط','الثاني المتوسط','الثالث المتوسط'],subjects:['التربية الإسلامية','اللغة العربية','اللغة الإنجليزية','الرياضيات','الاجتماعيات','الأحياء','الكيمياء','الفيزياء','الحاسوب','التربية الفنية','التربية الرياضية']},preparatory:{name:'المرحلة الإعدادية',grades:['الرابع العلمي','الرابع الأدبي','الخامس العلمي','الخامس الأدبي','السادس العلمي','السادس الأدبي'],subjects:['التربية الإسلامية','اللغة العربية','اللغة الإنجليزية','الرياضيات','الفيزياء','الكيمياء','الأحياء','الحاسوب','التاريخ','الجغرافية','الاقتصاد','علم الاجتماع','الفلسفة وعلم النفس','التربية الرياضية']}};
+const curriculum={primary:{name:'المرحلة الابتدائية',grades:['الأول الابتدائي','الثاني الابتدائي','الثالث الابتدائي','الرابع الابتدائي','الخامس الابتدائي','السادس الابتدائي'],subjects:['التربية الإسلامية','قراءتي / اللغة العربية','اللغة الإنجليزية','الرياضيات','العلوم','الاجتماعيات','التربية الأخلاقية','التربية الفنية','التربية الرياضية']},intermediate:{name:'المرحلة المتوسطة',grades:['الأول المتوسط','الثاني المتوسط','الثالث المتوسط'],subjects:['التربية الإسلامية','اللغة العربية','اللغة الإنجليزية','الرياضيات','الاجتماعيات','الأحياء','الكيمياء','الفيزياء','الحاسوب','التربية الفنية','التربية الرياضية']},preparatory:{name:'المرحلة الإعدادية',grades:['الرابع العلمي','الرابع الأدبي','الخامس العلمي','الخامس الأدبي','السادس العلمي','السادس الأدبي'],subjects:['التربية الإسلامية','اللغة العربية','اللغة الإنجليزية','الرياضيات','الفيزياء','الكيمياء','الأحياء','الحاسوب','التاريخ','الجغرافية','الاقتصاد','علم الاجتماع','الفلسفة وعلم النفس','التربية الفنية','التربية الرياضية']}};
+curriculum.secondary={name:'المرحلة الثانوية',grades:[...curriculum.intermediate.grades,...curriculum.preparatory.grades],subjects:[...new Set([...curriculum.intermediate.subjects,...curriculum.preparatory.subjects])]};
 const days=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس'];
 const allPeriods=['الأولى','الثانية','الثالثة','الرابعة','الخامسة','السادسة'];
 const sectionLetters=['أ','ب','ج','د','هـ','و'];
@@ -476,10 +506,15 @@ let toastTimer,undoAction=null,editingStudentId=null,editingStudentContext=null;
 let savedRealWorkspace=null;
 let storageWarning='',storageWriteFailed=false,demoLandingOnLoad=false;
 
-function defaultState(){return{version:4,demoMode:false,workspaceStarted:false,extraCoverage:true,starterStudentsReady:false,manualTeacherStages:[],schoolName:'',principalName:'',stage:'primary',periodsCount:5,students:{},studentSelectedGrades:{},hasSections:false,sectionsCount:2,sectionCounts:{},weeklyLoads:{},planModes:{primary:'auto',intermediate:'auto',preparatory:'auto'},teachers:{primary:[],intermediate:[],preparatory:[]},savedSchedule:null};}
+function defaultState(){return{version:5,demoMode:false,workspaceStarted:false,extraCoverage:true,starterStudentsReady:false,manualTeacherStages:[],schoolName:'',principalName:'',stage:'primary',periodsCount:5,students:{},studentSelectedGrades:{},hasSections:false,sectionsCount:2,sectionCounts:{},disabledGrades:{},weeklyLoads:{},planModes:Object.fromEntries(Object.keys(curriculum).map(stage=>[stage,'auto'])),teachers:Object.fromEntries(Object.keys(curriculum).map(stage=>[stage,[]])),savedSchedule:null};}
+function activeGrades(config=state){const excluded=config.disabledGrades?.[config.stage]||[];return curriculum[config.stage].grades.filter(g=>!excluded.includes(g));}
+function normalizedWorkDays(teacher){return Array.isArray(teacher?.workDays)?[...new Set(teacher.workDays.filter(d=>Number.isInteger(d)&&d>=0&&d<days.length))].sort((a,b)=>a-b):days.map((_,i)=>i);}
+function teacherDays(teacher){const limit=Number.isInteger(teacher?.maxWorkDays)&&teacher.maxWorkDays>=1&&teacher.maxWorkDays<=5?teacher.maxWorkDays:5;return normalizedWorkDays(teacher).slice(0,limit);}
+function teacherCapacity(teacher,config=state){return teacherDays(teacher).length*getPeriods(config).length;}
+function personCapacities(assignments,config){return new Map(assignments.map(t=>[t.personId||t.id,teacherCapacity(t,config)]));}
 function getPeriods(config=state){return allPeriods.slice(0,config?.periodsCount===6?6:5);}
 function sectionCountForGrade(config,grade){return config.hasSections?boundedCount(config.sectionCounts?.[config.stage]?.[grade]??config.sectionsCount):1;}
-function buildClasses(config){return curriculum[config.stage].grades.flatMap((grade,g)=>Array.from({length:sectionCountForGrade(config,grade)},(_,s)=>({id:`${config.stage}-${g}-${s}`,baseGrade:grade,section:s,title:config.hasSections?`${grade} (${sectionLetters[s]})`:grade})));}
+function buildClasses(config){return curriculum[config.stage].grades.flatMap((grade,g)=>activeGrades(config).includes(grade)?Array.from({length:sectionCountForGrade(config,grade)},(_,s)=>({id:`${config.stage}-${g}-${s}`,baseGrade:grade,section:s,title:config.hasSections?`${grade} (${sectionLetters[s]})`:grade})):[]);}
 function teacherClassIds(teacher,config=state){const classes=buildClasses(config);return Array.isArray(teacher.classIds)?classes.filter(c=>teacher.classIds.includes(c.id)).map(c=>c.id):classes.filter(c=>teacher.grades?.includes(c.baseGrade)).map(c=>c.id);}
 function activeTeachers(){return state.teachers[state.stage];}
 function teacherLabel(teacher){return teacher.staffLabel?`${teacher.name} (${teacher.staffLabel})`:teacher.name;}
@@ -491,15 +526,15 @@ function subjectCandidates(assignments,subject,classId,config){
  return [...new Map(eligible.map(t=>[t.personId||t.id,t])).values()];
 }
 function automaticExtraPlans(config,assignments){
- const grades=curriculum[config.stage].grades,subjects=curriculum[config.stage].subjects,classes=buildClasses(config),slots=5*getPeriods(config).length;
+ const grades=activeGrades(config),subjects=curriculum[config.stage].subjects,classes=buildClasses(config),slots=5*getPeriods(config).length,capacities=personCapacities(assignments,config);
  const plans=Object.fromEntries(grades.map(g=>[g,Object.fromEntries(subjects.map(s=>[s,0]))])),loads=new Map();
  const available=subjects.filter(s=>assignments.some(t=>t.subject===s));
  const bySubject=new Map(available.map(s=>[s,subjectCandidates(assignments,s,'',config)])),groups=new Map(grades.map(g=>[g,classes.filter(c=>c.baseGrade===g)])),directClasses=new Map(assignments.map(t=>[t,new Set(teacherClassIds(t,config))]));
  const trial=(grade,subject)=>{const extra=new Map();let overflow=0;
   for(const cls of groups.get(grade)){
    const candidates=bySubject.get(subject),load=t=>(loads.get(t.personId||t.id)||0)+(extra.get(t.personId||t.id)||0);
-   const ranked=[...candidates].sort((a,b)=>Math.max(0,load(a)+1-slots)-Math.max(0,load(b)+1-slots)||Number(!directClasses.get(a).has(cls.id))-Number(!directClasses.get(b).has(cls.id))||load(a)-load(b));
-   const t=ranked[0],id=t.personId||t.id;if(load(t)>=slots)overflow++;extra.set(id,(extra.get(id)||0)+1);
+   const ranked=[...candidates].sort((a,b)=>Math.max(0,load(a)+1-capacities.get(a.personId||a.id))-Math.max(0,load(b)+1-capacities.get(b.personId||b.id))||Number(!directClasses.get(a).has(cls.id))-Number(!directClasses.get(b).has(cls.id))||load(a)-load(b));
+   const t=ranked[0],id=t.personId||t.id;if(load(t)>=capacities.get(id))overflow++;extra.set(id,(extra.get(id)||0)+1);
   }return{subject,extra,overflow,peak:Math.max(0,...[...extra].map(([id,n])=>(loads.get(id)||0)+n))};
  };
  for(let round=0;round<slots&&available.length;round++)for(let offset=0;offset<grades.length;offset++){
@@ -533,7 +568,7 @@ function allocateLessonJobs(config,assignments){
   const ordered=[...request.candidates].sort((a,b)=>Number(!request.direct.has(a.personId||a.id))-Number(!request.direct.has(b.personId||b.id)));
   for(const teacher of ordered){const id=teacher.personId||teacher.id,extra=!request.direct.has(id);request.edges.push({teacher,extra,edge:edge(1+i,personNode.get(id),request.count,extra?1000000:0)});}
  });
- for(const id of persons)edge(personNode.get(id),sink,slots,0);
+ for(const id of persons)edge(personNode.get(id),sink,teacherCapacity(people.get(id),config),0);
  for(;;){
   const distance=Array(graph.length).fill(Infinity),previousNode=Array(graph.length).fill(-1),previousEdge=Array(graph.length).fill(-1),queued=Array(graph.length).fill(false),queue=[source];distance[source]=0;queued[source]=true;
   for(let q=0;q<queue.length;q++){const u=queue[q];queued[u]=false;for(let i=0;i<graph[u].length;i++){const e=graph[u][i];if(e.capacity<=0||distance[e.to]<=distance[u]+e.cost)continue;distance[e.to]=distance[u]+e.cost;previousNode[e.to]=u;previousEdge[e.to]=i;if(!queued[e.to]){queued[e.to]=true;queue.push(e.to);}}}
@@ -556,10 +591,10 @@ function syncExtraCoverageControls(){$('extraCoverageSchedule').checked=extraCov
 function changeExtraCoverage(event){state.extraCoverage=event.target.checked;syncExtraCoverageControls();invalidate();renderCoverage();toast(state.extraCoverage?'تم تفعيل الإسناد التلقائي.':'سيُستخدم الإسناد اليدوي فقط.');}
 
 function automaticPlans(config,assignments=config.teachers?.[config.stage]||[]){
- const key=JSON.stringify([config.stage,config.periodsCount,config.hasSections,config.sectionsCount,config.extraCoverage,config.sectionCounts?.[config.stage],assignments.map(t=>[t.personId||t.id,t.subject,t.classIds,t.grades])]);
+ const key=JSON.stringify([config.stage,config.periodsCount,config.hasSections,config.sectionsCount,config.extraCoverage,config.sectionCounts?.[config.stage],activeGrades(config),assignments.map(t=>[t.personId||t.id,t.subject,t.classIds,t.grades,teacherDays(t)])]);
  if(autoPlanCache.key===key)return autoPlanCache.plans;
  if(extraCoverageEnabled(config)){const plans=automaticExtraPlans(config,assignments);autoPlanCache={key,plans};return plans;}
- const grades=curriculum[config.stage].grades,subjects=curriculum[config.stage].subjects,classes=buildClasses(config),slots=5*getPeriods(config).length,loads=new Map();
+ const grades=activeGrades(config),subjects=curriculum[config.stage].subjects,classes=buildClasses(config),slots=5*getPeriods(config).length,loads=new Map(),capacities=personCapacities(assignments,config);
  const plans=Object.fromEntries(grades.map(g=>[g,Object.fromEntries(subjects.map(s=>[s,0]))]));
  const options=new Map(grades.map(grade=>{
   const group=classes.filter(c=>c.baseGrade===grade);
@@ -569,7 +604,7 @@ function automaticPlans(config,assignments=config.teachers?.[config.stage]||[]){
    }return{subject,people,missing,hasTeacher};
   }).filter(o=>o.hasTeacher)];
  }));
- const excess=(id,delta=0)=>Math.max(0,(loads.get(id)||0)+delta-slots);
+ const excess=(id,delta=0)=>Math.max(0,(loads.get(id)||0)+delta-(capacities.get(id)||0));
  const cost=option=>option.missing+[...option.people].reduce((n,[id,count])=>n+excess(id,count)-excess(id),0);
  const assign=(option,delta)=>{for(const [id,n]of option.people)loads.set(id,(loads.get(id)||0)+delta*n);};
  // Build a balanced suggestion while respecting each person's total available time.
@@ -594,9 +629,9 @@ function automaticPlans(config,assignments=config.teachers?.[config.stage]||[]){
 }
 function suggestedPlan(config,grade,assignments=config.teachers?.[config.stage]||[]){return automaticPlans(config,assignments)[grade]||{};}
 function weeklyPlan(config,grade){return planMode(config)==='auto'&&config.teachers?suggestedPlan(config,grade):config.weeklyLoads?.[config.stage]?.[grade]||{};}
-function materializeWeeklyPlans(config=state){const plans=Object.fromEntries(curriculum[config.stage].grades.map(g=>[g,{...weeklyPlan(config,g)}]));config.weeklyLoads[config.stage]=plans;config.planModes[config.stage]='manual';}
-function snapshotScheduleConfig(config){const stage=config.stage;return{schoolName:config.schoolName||'',principalName:config.principalName||'',stage,periodsCount:config.periodsCount===6?6:5,hasSections:!!config.hasSections,sectionsCount:boundedCount(config.sectionsCount||2),sectionCounts:{[stage]:Object.fromEntries(curriculum[stage].grades.map(g=>[g,sectionCountForGrade(config,g)]))},weeklyLoads:{[stage]:Object.fromEntries(curriculum[stage].grades.map(g=>[g,Object.fromEntries(curriculum[stage].subjects.map(s=>[s,weeklyPlan(config,g)[s]||0]))]))},...(config.extraCoverage!==undefined?{extraCoverage:!!config.extraCoverage}:{}),...(config.demoMode?{demoMode:true}:{})};}
-function scheduleSignature(config,assignments){return JSON.stringify([snapshotScheduleConfig(config),assignments.map(t=>({id:t.id,personId:t.personId,name:t.name,staffLabel:t.staffLabel||'',subject:t.subject,classIds:teacherClassIds(t,config).sort()})).sort((a,b)=>a.id.localeCompare(b.id))]);}
+function materializeWeeklyPlans(config=state){const plans={...config.weeklyLoads[config.stage],...Object.fromEntries(activeGrades(config).map(g=>[g,{...weeklyPlan(config,g)}]))};config.weeklyLoads[config.stage]=plans;config.planModes[config.stage]='manual';}
+function snapshotScheduleConfig(config){const stage=config.stage;return{schoolName:config.schoolName||'',principalName:config.principalName||'',stage,periodsCount:config.periodsCount===6?6:5,hasSections:!!config.hasSections,sectionsCount:boundedCount(config.sectionsCount||2),disabledGrades:{[stage]:curriculum[stage].grades.filter(g=>!activeGrades(config).includes(g))},sectionCounts:{[stage]:Object.fromEntries(curriculum[stage].grades.map(g=>[g,sectionCountForGrade(config,g)]))},weeklyLoads:{[stage]:Object.fromEntries(curriculum[stage].grades.map(g=>[g,Object.fromEntries(curriculum[stage].subjects.map(s=>[s,weeklyPlan(config,g)[s]||0]))]))},...(config.extraCoverage!==undefined?{extraCoverage:!!config.extraCoverage}:{}),...(config.demoMode?{demoMode:true}:{})};}
+function scheduleSignature(config,assignments){return JSON.stringify([snapshotScheduleConfig(config),assignments.map(t=>({id:t.id,personId:t.personId,name:t.name,staffLabel:t.staffLabel||'',subject:t.subject,classIds:teacherClassIds(t,config).sort(),maxWorkDays:t.maxWorkDays||5,workDays:teacherDays(t)})).sort((a,b)=>a.id.localeCompare(b.id))]);}
 function shuffled(items,random=Math.random){const copy=[...items];for(let i=copy.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}return copy;}
 function normalizeNumber(value){return String(value??'').trim().replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632)).replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).replace(/٫/g,'.');}
 function optionalScore(value){const normalized=normalizeNumber(value);if(!normalized)return null;if(!/^\d+(?:\.\d+)?$/.test(normalized))throw new Error('اكتب درجة صحيحة تساوي صفرًا أو أكثر.');const number=Number(normalized);if(!Number.isFinite(number))throw new Error('اكتب درجة صحيحة.');return number;}
@@ -613,6 +648,8 @@ function cleanState(raw){
  const assignmentIds=new Set(),legacyPeople=new Map(),personInfo=new Map();
  for(const stage of Object.keys(curriculum)){
   clean.sectionCounts[stage]={};clean.weeklyLoads[stage]={};
+  clean.disabledGrades[stage]=Array.isArray(raw.disabledGrades?.[stage])?curriculum[stage].grades.filter(g=>raw.disabledGrades[stage].includes(g)):[];
+  if(clean.disabledGrades[stage].length===curriculum[stage].grades.length)clean.disabledGrades[stage].pop();
   for(const grade of curriculum[stage].grades){
    clean.sectionCounts[stage][grade]=boundedCount(raw.sectionCounts?.[stage]?.[grade]??clean.sectionsCount);
    const source=raw.weeklyLoads?.[stage]?.[grade]||{};
@@ -627,8 +664,8 @@ function cleanState(raw){
    let id=typeof t.id==='string'&&t.id.length<100&&t.id&&!assignmentIds.has(t.id)?t.id:uid();assignmentIds.add(id);
    const name=tidyName(t.name).slice(0,80);let personId=typeof t.personId==='string'&&t.personId.length<100&&t.personId?t.personId:legacyPeople.get(name);
    if(!personId){personId=uid();legacyPeople.set(name,personId);}
-   if(!personInfo.has(personId))personInfo.set(personId,{name,staffLabel:tidyName(t.staffLabel).slice(0,40)});
-   const info=personInfo.get(personId);
+   if(!personInfo.has(personId))personInfo.set(personId,{name,staffLabel:tidyName(t.staffLabel).slice(0,40),maxWorkDays:Number.isInteger(t.maxWorkDays)&&t.maxWorkDays>=1&&t.maxWorkDays<=5?t.maxWorkDays:5,workDays:teacherDays(t).length?teacherDays(t):[0,1,2,3,4]});
+   const info=personInfo.get(personId);info.workDays=info.workDays.slice(0,info.maxWorkDays);
    const classIds=Array.isArray(t.classIds)?[...new Set(t.classIds.filter(id=>possible.has(id)))]:buildClasses(config).filter(c=>t.grades.includes(c.baseGrade)).map(c=>c.id);
    return{id,personId,...info,isDemo:t.isDemo===true,subject:t.subject,classIds,grades:curriculum[stage].grades.filter((_,g)=>classIds.some(id=>id.startsWith(`${stage}-${g}-`)))};
   });
@@ -638,7 +675,7 @@ function cleanState(raw){
 }
 function cleanSavedSchedule(raw){
  try{
-  if(!raw||raw.version!==4||!raw.config||!Object.hasOwn(curriculum,raw.config.stage)||typeof raw.signature!=='string'||!Number.isFinite(Date.parse(raw.createdAt)))return null;
+  if(!raw||![4,5].includes(raw.version)||!raw.config||!Object.hasOwn(curriculum,raw.config.stage)||typeof raw.signature!=='string'||!Number.isFinite(Date.parse(raw.createdAt)))return null;
   const config=snapshotScheduleConfig(raw.config),classes=buildClasses(config),data={},subjects=curriculum[config.stage].subjects;
   if(!Array.isArray(raw.classes)||JSON.stringify(raw.classes)!==JSON.stringify(classes))return null;
   for(let d=0;d<days.length;d++){data[d]={};for(const cls of classes){
@@ -650,20 +687,22 @@ function cleanSavedSchedule(raw){
    });
   }}
   const signed=JSON.parse(raw.signature);
-  if(!Array.isArray(signed)||signed.length!==2||JSON.stringify(signed[0])!==JSON.stringify(config)||!Array.isArray(signed[1]))return null;
-  const expected=new Map();
+  if(!Array.isArray(signed)||signed.length!==2||JSON.stringify(snapshotScheduleConfig(signed[0]))!==JSON.stringify(config)||!Array.isArray(signed[1]))return null;
+  const expected=new Map(),attendance=new Map();
   for(const assignment of signed[1]){
    if(!assignment||typeof assignment.personId!=='string'||!assignment.personId||!subjects.includes(assignment.subject)||!Array.isArray(assignment.classIds))return null;
+   const workDays=teacherDays(assignment);if(!workDays.length)return null;const priorDays=attendance.get(assignment.personId);if(priorDays&&JSON.stringify(priorDays)!==JSON.stringify(workDays))return null;attendance.set(assignment.personId,workDays);
    for(const classId of assignment.classIds){const key=classId+'|'+assignment.subject,prior=expected.get(key);if(prior&&prior!==assignment.personId)return null;expected.set(key,assignment.personId);}
   }
   const shortages=new Map();
   for(let d=0;d<5;d++)for(const cls of classes)for(const cell of data[d][cls.id]){
    if(cell.unassigned){const key=cls.id+'|'+cell.plannedSubject+'|'+cell.reason;if(!shortages.has(key))shortages.set(key,{classId:cls.id,subject:cell.plannedSubject,count:0,reason:cell.reason});shortages.get(key).count++;}
-   else{const direct=expected.get(cls.id+'|'+cell.subject)===cell.teacherId,qualified=signed[1].some(t=>t.personId===cell.teacherId&&t.subject===cell.subject);if(cell.extra?(!config.extraCoverage||direct||!qualified):!direct)return null;}
+   else{if(!attendance.get(cell.teacherId)?.includes(d))return null;const direct=expected.get(cls.id+'|'+cell.subject)===cell.teacherId,qualified=signed[1].some(t=>t.personId===cell.teacherId&&t.subject===cell.subject);if(cell.extra?(!config.extraCoverage||direct||!qualified):!direct)return null;}
   }
   for(let d=0;d<5;d++)for(let p=0;p<getPeriods(config).length;p++){const ids=classes.map(c=>data[d][c.id][p]).filter(c=>!c.unassigned).map(c=>c.teacherId);if(new Set(ids).size!==ids.length)return null;}
   for(const cls of classes){const counts={},plan=weeklyPlan(config,cls.baseGrade);let unplanned=0;for(let d=0;d<5;d++)for(const cell of data[d][cls.id]){if(cell.reason==='unplanned'){unplanned++;continue;}const subject=cell.unassigned?cell.plannedSubject:cell.subject;counts[subject]=(counts[subject]||0)+1;}for(const subject of subjects)if((counts[subject]||0)!==(plan[subject]||0))return null;const planned=subjects.reduce((n,s)=>n+(plan[s]||0),0);if(unplanned!==5*getPeriods(config).length-planned)return null;}
-  return{version:4,classes,data,extraCount:Object.values(data).reduce((n,day)=>n+Object.values(day).flat().filter(c=>c.extra&&!c.unassigned).length,0),config,createdAt:raw.createdAt,signature:raw.signature,shortages:[...shortages.values()],unassigned:[...shortages.values()].reduce((n,s)=>n+s.count,0)};
+  const signature=JSON.stringify([config,signed[1].map(t=>({id:t.id,personId:t.personId,name:t.name,staffLabel:t.staffLabel||'',subject:t.subject,classIds:[...t.classIds].sort(),maxWorkDays:t.maxWorkDays||5,workDays:teacherDays(t)})).sort((a,b)=>a.id.localeCompare(b.id))]);
+  return{version:5,classes,data,extraCount:Object.values(data).reduce((n,day)=>n+Object.values(day).flat().filter(c=>c.extra&&!c.unassigned).length,0),config,createdAt:raw.createdAt,signature,shortages:[...shortages.values()],unassigned:[...shortages.values()].reduce((n,s)=>n+s.count,0)};
  }catch{return null;}
 }
 
@@ -704,7 +743,9 @@ function invalidate(){if(generated){isStale=generated.signature!==scheduleSignat
 // Lessons are edges between a class and a person. Missing staff and excess
 // teaching demand become blank cells. Perfect matchings schedule every
 // remaining lesson exactly once without booking a person twice.
-function spreadScheduleDays(data,classes,periods){
+function spreadScheduleDays(data,classes,periods,attendance=null){
+ const allowed=(cell,day)=>cell.unassigned||!attendance||attendance.get(cell.teacherId)?.includes(day);
+ const canSwap=(ci,a,b)=>allowed(cellAt(ci,a),Math.floor(b/periods))&&allowed(cellAt(ci,b),Math.floor(a/periods));
  const slots=5*periods,subject=cell=>cell.unassigned?cell.plannedSubject:cell.subject;
  const counts=classes.map(cls=>Array.from({length:5},(_,d)=>{const map=new Map();for(const cell of data[d][cls.id]){const key=subject(cell);map.set(key,(map.get(key)||0)+1);}return map;}));
  const cellAt=(ci,t)=>data[Math.floor(t/periods)][classes[ci].id][t%periods];
@@ -725,21 +766,21 @@ function spreadScheduleDays(data,classes,periods){
   let changed=false;
   for(let ci=0;ci<classes.length;ci++){
    let best=null,score=0;for(let a=0;a<slots;a++)for(let b=a+1;b<slots;b++){
-    const change=delta(ci,a,b);if(change>=score)continue;const ca=cellAt(ci,a),cb=cellAt(ci,b);
+    if(!canSwap(ci,a,b))continue;const change=delta(ci,a,b);if(change>=score)continue;const ca=cellAt(ci,a),cb=cellAt(ci,b);
     if(!ca.unassigned&&busy[b].has(ca.teacherId)&&ca.teacherId!==cb.teacherId)continue;
     if(!cb.unassigned&&busy[a].has(cb.teacherId)&&cb.teacherId!==ca.teacherId)continue;
     best=[a,b];score=change;
    }if(best){swap(ci,...best);changed=true;}
   }
   let best=null,score=0;for(let a=0;a<slots;a++)for(let b=a+1;b<slots;b++){
-   const change=classes.reduce((n,_,ci)=>n+delta(ci,a,b),0);if(change<score){score=change;best=[a,b];}
+   if(!classes.every((_,ci)=>canSwap(ci,a,b)))continue;const change=classes.reduce((n,_,ci)=>n+delta(ci,a,b),0);if(change<score){score=change;best=[a,b];}
   }
   if(best){for(let ci=0;ci<classes.length;ci++)swap(ci,...best);busy[best[0]]=new Set(classes.map((_,ci)=>cellAt(ci,best[0])).filter(c=>!c.unassigned).map(c=>c.teacherId));busy[best[1]]=new Set(classes.map((_,ci)=>cellAt(ci,best[1])).filter(c=>!c.unassigned).map(c=>c.teacherId));changed=true;}
   if(!changed)break;
  }
 }
 
-function createSchedule(config,assignments,random=Math.random){
+function createUnrestrictedSchedule(config,assignments,random=Math.random){
  const classes=buildClasses(config),allocation=allocateLessonJobs(config,assignments),slots=allocation.slots,jobs=allocation.jobs,people=new Map();
  const gaps=new Map(classes.map(c=>[c.id,[]]));for(const gap of allocation.gaps)gaps.get(gap.classId).push({...gap,remaining:gap.count});
  for(const job of jobs)if(!people.has(job.personId))people.set(job.personId,{id:job.personId,name:job.teacher});
@@ -781,7 +822,84 @@ function createSchedule(config,assignments,random=Math.random){
  }
  spreadScheduleDays(data,classes,getPeriods(config).length);
  const shortages=classes.flatMap(cls=>gaps.get(cls.id).map(g=>({classId:cls.id,subject:g.subject,count:g.count,reason:g.reason})));
- return{version:4,classes,data,extraCount:allocation.extraCount,unassigned:shortages.reduce((n,g)=>n+g.count,0),shortages,config:snapshotScheduleConfig(config),signature:scheduleSignature(config,assignments),createdAt:new Date().toISOString()};
+ return{version:5,classes,data,extraCount:allocation.extraCount,unassigned:shortages.reduce((n,g)=>n+g.count,0),shortages,config:snapshotScheduleConfig(config),signature:scheduleSignature(config,assignments),createdAt:new Date().toISOString()};
+}
+
+// Assign lessons to attendance days first. Each day's bipartite graph can then
+// be colored into periods without any teacher or class collisions.
+function splitJobsByDay(config,jobs,assignments,random){
+ const periods=getPeriods(config).length,classes=buildClasses(config),classIndex=new Map(classes.map((c,i)=>[c.id,i])),people=[...new Map(assignments.map(t=>[t.personId||t.id,t])).values()],personIndex=new Map(people.map((t,i)=>[t.personId||t.id,i])),allowed=people.map(teacherDays);
+ const tokens=jobs.flatMap((job,jobIndex)=>Array.from({length:job.count},()=>({jobIndex,ci:classIndex.get(job.classId),pi:personIndex.get(job.personId),day:-1})));
+ const byClass=classes.map(()=>[]),byPerson=people.map(()=>[]);tokens.forEach((t,i)=>{byClass[t.ci].push(i);byPerson[t.pi].push(i);});
+ const bitCount=mask=>{let count=0;for(;mask;mask>>=1)count+=mask&1;return count;};
+ const masks=allowed.map(ds=>ds.reduce((mask,d)=>mask|(1<<d),0));
+ for(let ci=0;ci<classes.length;ci++)for(let mask=1;mask<32;mask++){
+  const demand=byClass[ci].filter(i=>(masks[tokens[i].pi]&mask)===masks[tokens[i].pi]).length,capacity=bitCount(mask)*periods;
+  if(demand>capacity){const namedDays=days.filter((_,d)=>mask&(1<<d)).join('، ');throw new Error(`${classes[ci].title}: توجد ${demand} حصص محصورة في ${namedDays}، والمتاح ${capacity} فقط. وسّع أيام دوام بعض الأساتذة أو وزّع حصص المادة على أستاذ آخر.`);}
+ }
+ const penalty=n=>Math.max(0,n-periods)**2,deadline=performance.now()+2200;
+ for(let attempt=0;attempt<12;attempt++){
+  const cd=classes.map(()=>Array(5).fill(0)),pd=people.map(()=>Array(5).fill(0));for(const t of tokens)t.day=-1;
+  const personOrder=shuffled(people.map((_,i)=>i),random).sort((a,b)=>allowed[a].length-allowed[b].length||byPerson[b].length/allowed[b].length-byPerson[a].length/allowed[a].length);
+  // Max-flow for each teacher avoids filling a class's day unnecessarily.
+  for(const pi of personOrder){
+   if(!byPerson[pi].length)continue;
+   const cis=shuffled([...new Set(byPerson[pi].map(i=>tokens[i].ci))],random),source=0,dayStart=1+cis.length,sink=dayStart+5,graph=Array.from({length:sink+1},()=>[]),links=[];
+   const add=(u,v,cap)=>{const edge={to:v,cap,initial:cap,rev:graph[v].length};graph[u].push(edge);graph[v].push({to:u,cap:0,rev:graph[u].length-1});return edge;};
+   cis.forEach((ci,i)=>{const ids=shuffled(byPerson[pi].filter(id=>tokens[id].ci===ci),random);add(source,i+1,ids.length);for(const d of shuffled(allowed[pi],random)){const edge=add(i+1,dayStart+d,Math.max(0,periods-cd[ci][d]));links.push({ci,d,edge});}});
+   for(const d of allowed[pi])add(dayStart+d,sink,periods);
+   for(;;){const prev=Array(graph.length).fill(null),queue=[source];prev[source]=[-1,-1];for(let q=0;q<queue.length&&!prev[sink];q++){const u=queue[q];graph[u].forEach((e,i)=>{if(e.cap>0&&!prev[e.to]){prev[e.to]=[u,i];queue.push(e.to);}});}if(!prev[sink])break;let amount=Infinity;for(let v=sink;v!==source;v=prev[v][0]){const [u,i]=prev[v];amount=Math.min(amount,graph[u][i].cap);}for(let v=sink;v!==source;v=prev[v][0]){const [u,i]=prev[v],e=graph[u][i];e.cap-=amount;graph[v][e.rev].cap+=amount;}}
+   for(const {ci,d,edge}of links){let count=edge.initial-edge.cap;for(const id of byPerson[pi]){const t=tokens[id];if(count&&t.ci===ci&&t.day===-1){t.day=d;cd[ci][d]++;pd[pi][d]++;count--;}}}
+   for(const id of shuffled(byPerson[pi],random)){const t=tokens[id];if(t.day!==-1)continue;const choices=shuffled(allowed[pi],random).filter(d=>pd[pi][d]<periods);if(!choices.length)throw new Error('حصص الأستاذ تتجاوز أيام دوامه. راجع تكليفاته.');choices.sort((a,b)=>cd[t.ci][a]-cd[t.ci][b]);t.day=choices[0];cd[t.ci][t.day]++;pd[pi][t.day]++;}
+  }
+  let score=cd.flat().reduce((n,k)=>n+penalty(k),0)+pd.flat().reduce((n,k)=>n+penalty(k),0),stagnant=0;
+  const move=(t,d)=>{cd[t.ci][t.day]--;pd[t.pi][t.day]--;t.day=d;cd[t.ci][d]++;pd[t.pi][d]++;};
+  const change=(row,a,b)=>penalty(row[a]-1)+penalty(row[b]+1)-penalty(row[a])-penalty(row[b]);
+  for(let iteration=0;score&&iteration<Math.max(3000,tokens.length*35);iteration++){
+   if(iteration%100===0&&performance.now()>deadline)break;
+   const start=Math.floor(random()*tokens.length);let id=-1;for(let k=0;k<tokens.length;k++){const i=(start+k)%tokens.length,t=tokens[i];if(cd[t.ci][t.day]>periods||pd[t.pi][t.day]>periods){id=i;break;}}if(id<0)break;
+   const t=tokens[id],a=t.day;let best=Infinity,choice=null,ties=0;
+   const consider=(delta,option)=>{if(delta<best){best=delta;choice=option;ties=1;}else if(delta===best&&random()<1/++ties)choice=option;};
+   for(const d of shuffled(allowed[t.pi],random))if(d!==a)consider(change(cd[t.ci],a,d)+change(pd[t.pi],a,d),{day:d});
+   for(const other of byPerson[t.pi]){const u=tokens[other],b=u.day;if(a===b||t.ci===u.ci)continue;consider(change(cd[t.ci],a,b)+change(cd[u.ci],b,a),{swap:other});}
+   for(const other of byClass[t.ci]){const u=tokens[other],b=u.day;if(a===b||t.pi===u.pi||!allowed[t.pi].includes(b)||!allowed[u.pi].includes(a))continue;consider(change(pd[t.pi],a,b)+change(pd[u.pi],b,a),{swap:other});}
+   if(!choice)break;
+   const temperature=stagnant>100?1.5:.35;if(best<=0||random()<Math.exp(-best/temperature)){
+    if(choice.swap!==undefined){const u=tokens[choice.swap],b=u.day;move(t,b);move(u,a);}else move(t,choice.day);score+=best;
+   }stagnant=best<0?0:stagnant+1;if(stagnant>1800)break;
+  }
+  if(!score){const daily=Array.from({length:5},()=>new Map());for(const t of tokens)daily[t.day].set(t.jobIndex,(daily[t.day].get(t.jobIndex)||0)+1);return daily.map(group=>[...group].map(([i,count])=>({...jobs[i],count})));}
+  if(performance.now()>deadline)break;
+ }
+ throw new Error('تعذر إيجاد توزيع يلتزم بأيام دوام جميع الأساتذة. جرّب إتاحة أيام أخرى لبعض الأساتذة، أو توزيع تكليفاتهم على كادر إضافي ثم أعد الإنشاء.');
+}
+function colorDayLessons(classes,jobs,periods,random){
+ const persons=[...new Set(jobs.map(j=>j.personId))],n=Math.max(classes.length,persons.length),matrix=Array.from({length:n},()=>new Map()),left=Array(n).fill(0),right=Array(n).fill(0),ci=new Map(classes.map((c,i)=>[c.id,i])),pi=new Map(persons.map((id,i)=>[id,i]));
+ const add=(l,r,count,job=null)=>{if(!count)return;let pair=matrix[l].get(r);if(!pair){pair={count:0,jobs:[]};matrix[l].set(r,pair);}pair.count+=count;if(job)pair.jobs.push({...job,remaining:count});left[l]+=count;right[r]+=count;};
+ for(const job of jobs)add(ci.get(job.classId),pi.get(job.personId),job.count,job);
+ if(left.some(k=>k>periods)||right.some(k=>k>periods))throw new Error('تجاوز داخلي في حصص اليوم. أعد إنشاء الجدول.');
+ let r=0;for(let l=0;l<n;l++)while(left[l]<periods){while(r<n&&right[r]===periods)r++;if(r===n)throw new Error('تعذر موازنة حصص اليوم.');add(l,r,Math.min(periods-left[l],periods-right[r]));}
+ const result=Object.fromEntries(classes.map(c=>[c.id,[]]));
+ for(let p=0;p<periods;p++){
+  const occupied=Array(n).fill(-1),matched=Array(n).fill(-1),candidates=matrix.map(row=>shuffled([...row].filter(([,pair])=>pair.count).map(([r])=>r),random));
+  const assign=(l,seen)=>{for(const r of candidates[l]){if(seen.has(r))continue;seen.add(r);if(occupied[r]<0||assign(occupied[r],seen)){occupied[r]=l;matched[l]=r;return true;}}return false;};
+  for(const l of shuffled(Array.from({length:n},(_,i)=>i),random))if(!assign(l,new Set()))throw new Error('تعذر توزيع حصص اليوم دون تعارض.');
+  for(let l=0;l<n;l++){const pair=matrix[l].get(matched[l]);pair.count--;if(l>=classes.length)continue;const job=pair.jobs.find(j=>j.remaining);if(job){job.remaining--;result[classes[l].id].push({subject:job.subject,teacher:job.teacher,teacherId:job.personId,...(job.extra?{extra:true}:{})});}else result[classes[l].id].push(null);}
+ }
+ return result;
+}
+function createSchedule(config,assignments,random=Math.random){
+ if(!buildClasses(config).length)throw new Error('فعّل صفًا دراسيًا واحدًا على الأقل قبل إنشاء الجدول.');
+ if(assignments.every(t=>teacherDays(t).length===5))return createUnrestrictedSchedule(config,assignments,random);
+ const classes=buildClasses(config),allocation=allocateLessonJobs(config,assignments),daily=splitJobsByDay(config,allocation.jobs,assignments,random),periods=getPeriods(config).length,data={};
+ for(let d=0;d<5;d++)data[d]=colorDayLessons(classes,daily[d],periods,random);
+ for(const cls of classes){
+  const gaps=allocation.gaps.filter(g=>g.classId===cls.id).flatMap(g=>Array.from({length:g.count},()=>g));let index=0;
+  for(let d=0;d<5;d++)for(let p=0;p<periods;p++)if(!data[d][cls.id][p]){const gap=gaps[index++];if(!gap)throw new Error('تعذر مطابقة الفراغات مع الخطة الأسبوعية.');data[d][cls.id][p]={subject:'',teacher:'',teacherId:'',unassigned:true,plannedSubject:gap.subject,reason:gap.reason};}
+ }
+ const attendance=new Map(assignments.map(t=>[t.personId||t.id,teacherDays(t)]));spreadScheduleDays(data,classes,periods,attendance);
+ const result={version:5,classes,data,extraCount:allocation.extraCount,unassigned:allocation.gaps.reduce((n,g)=>n+g.count,0),shortages:allocation.gaps,config:snapshotScheduleConfig(config),signature:scheduleSignature(config,assignments),createdAt:new Date().toISOString()};
+ if(!cleanSavedSchedule(result))throw new Error('تعذر التحقق من سلامة الجدول. راجع الحصص وأيام الدوام ثم أعد الإنشاء.');return result;
 }
 
 function demoName(index){
@@ -814,7 +932,7 @@ function seedStarterStudents(config){
   curriculum[stage].grades.forEach((grade,gradeIndex)=>{
    const bucket=config.students[stage][grade]??=emptyStudentBucket();
    if(bucket.list.length||bucket.revision!==0)return;
-   const age=stage==='primary'?6+gradeIndex:stage==='intermediate'?12+gradeIndex:15+Math.floor(gradeIndex/2);
+   const age=stage==='primary'?6+gradeIndex:stage==='intermediate'?12+gradeIndex:stage==='secondary'?(gradeIndex<3?12+gradeIndex:15+Math.floor((gradeIndex-3)/2)):15+Math.floor(gradeIndex/2);
    bucket.list=Array.from({length:36},(_,i)=>({id:`starter-student-${stage}-${gradeIndex}-${i}`,name:demoName(2560+stageIndex*768+gradeIndex*36+i),score:60+(i*7+gradeIndex*3)%41,birthYear:year-age-(i%9===0?1:0)}));
    bucket.revision=1;const settings={...bucket.settings,sectionsCount:sectionCountForGrade(view,grade)};
    bucket.distribution={...distributeStudents(bucket.list,settings),...settings,revision:bucket.revision,createdAt:new Date().toISOString()};
@@ -838,7 +956,7 @@ function prepareStarterState(config){
 }
 function createDemoState(){const demo=defaultState();demo.demoMode=true;demo.hasSections=true;demo.sectionsCount=2;demo.schoolName='مدرسة الأفق';demo.principalName='سامي فاضل الكعبي';for(const stage of Object.keys(curriculum))seedDemoStage(demo,stage,true);seedStarterStudents(demo);demo.savedSchedule=createSchedule(demo,demo.teachers[demo.stage]);return demo;}
 
-function studentGrade(){const saved=state.studentSelectedGrades[state.stage];return curriculum[state.stage].grades.includes(saved)?saved:curriculum[state.stage].grades[0];}
+function studentGrade(){const saved=state.studentSelectedGrades[state.stage];return activeGrades().includes(saved)?saved:activeGrades()[0];}
 function studentBucket(stage=state.stage,grade=studentGrade()){state.students[stage]??={};state.students[stage][grade]??=emptyStudentBucket();return state.students[stage][grade];}
 function studentSectionCount(){return sectionCountForGrade(state,studentGrade());}
 function validStudentDistribution(){const bucket=studentBucket(),d=bucket.distribution;return d&&d.revision===bucket.revision&&d.sectionsCount===studentSectionCount()&&d.mode===bucket.settings.mode&&d.order===bucket.settings.order&&d.pattern===bucket.settings.pattern?d:null;}
@@ -864,24 +982,49 @@ function refreshDemoTimetable(){
 function markStageEdited(stage=state.stage){state.manualTeacherStages=[...new Set([...state.manualTeacherStages,stage])];}
 function resetHorizontalViewport(){const viewport=window.visualViewport;if(viewport?.scale&&Math.abs(viewport.scale-1)>.02)return;const root=document.scrollingElement||document.documentElement;if(root&&root.scrollLeft)root.scrollLeft=0;if(window.scrollX)window.scrollTo({left:0,top:window.scrollY||0,behavior:'instant'});}
 function showPanel(panel,focus=true){if(!['school','teachers','students','schedules'].includes(panel))return;currentPanel=panel;for(const name of ['school','teachers','students','schedules'])$(`panel-${name}`).hidden=name!==panel;document.querySelectorAll('.nav-button[data-panel],.bottom-nav [data-panel]').forEach(b=>{b.classList.toggle('active',b.dataset.panel===panel);if(b.dataset.panel===panel)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});if(panel==='teachers')renderTeachers();if(panel==='students')renderStudents();syncPrintStatus();resetHorizontalViewport();if(focus){window.scrollTo({top:0,left:0,behavior:'instant'});$({school:'schoolTitle',teachers:'teachersTitle',students:'studentsTitle',schedules:'schedulesTitle'}[panel]).focus({preventScroll:true});}recordAppNavigation();}
-function applySchoolFields(){syncExtraCoverageControls();$('schoolName').value=state.schoolName;$('principalName').value=state.principalName;$('schoolStage').value=state.stage;$('hasSixthPeriod').checked=state.periodsCount===6;$('hasSections').checked=state.hasSections;$('sectionsCount').value=state.sectionsCount;$('sectionsField').hidden=!state.hasSections;updateSummary();renderSectionCounts();renderWeeklyLoads();}
+function renderGradeSelection(){
+ const grades=curriculum[state.stage].grades,enabled=new Set(activeGrades());
+ $('schoolGradesSelector').innerHTML=grades.map((g,i)=>`<label class="grade-option" for="school-grade-${i}"><input id="school-grade-${i}" type="checkbox" data-school-grade="${escapeHTML(g)}" ${enabled.has(g)?'checked':''}><span>${escapeHTML(g)}</span></label>`).join('');
+ $('gradeSelectionActions').innerHTML='<button type="button" class="btn outline" data-grade-group="all">تفعيل جميع الصفوف</button>'+['العلمي','الأدبي'].filter(branch=>grades.some(g=>g.includes(branch))).map(branch=>{const on=grades.filter(g=>g.includes(branch)).every(g=>enabled.has(g));return`<button type="button" class="btn outline" data-grade-group="${branch}">${on?'تعطيل':'تفعيل'} الصفوف ${branch==='العلمي'?'العلمية':'الأدبية'}</button>`;}).join('');
+ $('gradeSelectionStatus').textContent=`${enabled.size} من ${grades.length} صفوف مفعّلة`;$('gradeSelectionCount').textContent=`${enabled.size} من ${grades.length}`;
+}
+function setActiveGrades(next){
+ const grades=curriculum[state.stage].grades;if(!next.length){toast('يجب إبقاء صف دراسي واحد على الأقل.');renderGradeSelection();return;}
+ state.disabledGrades??={};state.disabledGrades[state.stage]=grades.filter(g=>!next.includes(g));
+ for(const key of quotaDrafts.keys()){const [stage,grade]=JSON.parse(key);if(stage===state.stage&&!next.includes(grade))quotaDrafts.delete(key);}quotaInputInvalid=quotaDrafts.size>0;
+ if(!next.includes(state.studentSelectedGrades[state.stage]))state.studentSelectedGrades[state.stage]=next[0];
+ $('scheduleErrors').hidden=true;const updated=refreshDemoTimetable();updateSummary();renderGradeSelection();renderSectionCounts();renderTeachers();renderStudents();invalidate();if(updated)renderGeneratedSchedule();
+}
+function changeActiveGrade(event){const input=event.target.closest('[data-school-grade]');if(!input)return;const next=new Set(activeGrades());if(input.checked)next.add(input.dataset.schoolGrade);else next.delete(input.dataset.schoolGrade);setActiveGrades([...next]);}
+function changeGradeGroup(event){const button=event.target.closest('[data-grade-group]');if(!button)return;const grades=curriculum[state.stage].grades,group=button.dataset.gradeGroup;if(group==='all'){setActiveGrades([...grades]);return;}const targets=grades.filter(g=>g.includes(group)),next=new Set(activeGrades()),on=targets.every(g=>next.has(g));for(const g of targets)if(on)next.delete(g);else next.add(g);setActiveGrades([...next]);}
+function selectedTeacherDays(){return [...$('teacherWorkDays').querySelectorAll('input:checked')].map(input=>Number(input.value));}
+function renderTeacherAvailability(teacher=null){
+ $('teacherMaxDays').value=teacher?.maxWorkDays||5;const selected=new Set(teacherDays(teacher));
+ $('teacherWorkDays').innerHTML=days.map((day,i)=>`<label class="work-day-option"><input type="checkbox" value="${i}" ${selected.has(i)?'checked':''}><span>${day}</span></label>`).join('');updateTeacherDaysHint();
+}
+function updateTeacherDaysHint(){const count=selectedTeacherDays().length,max=Number($('teacherMaxDays').value);$('teacherDaysHint').textContent=`${count} أيام محددة من حد أقصى ${max}. لتبديل يوم، ألغِ تحديده ثم اختر اليوم الآخر. لن توزّع حصص الأستاذ خارج الأيام المحددة.`;updateTeacherHint();}
+function changeTeacherMaxDays(){const max=Number($('teacherMaxDays').value),inputs=[...$('teacherWorkDays').querySelectorAll('input')];let chosen=inputs.filter(i=>i.checked);if(chosen.length>max)chosen.slice(max).forEach(i=>i.checked=false);else for(const i of inputs){if(chosen.length>=max)break;if(!i.checked){i.checked=true;chosen.push(i);}}$('teacherError').hidden=true;updateTeacherDaysHint();}
+function changeTeacherWorkDays(event){const selected=selectedTeacherDays(),max=Number($('teacherMaxDays').value);if(selected.length>max){event.target.checked=false;teacherFormError(`الحد الأقصى ${max} أيام. ألغِ يومًا محددًا قبل اختيار يوم آخر.`);}else if(!selected.length){event.target.checked=true;teacherFormError('اختر يوم دوام واحدًا على الأقل.');}else $('teacherError').hidden=true;updateTeacherDaysHint();}
+
+function applySchoolFields(){syncExtraCoverageControls();$('schoolName').value=state.schoolName;$('principalName').value=state.principalName;$('schoolStage').value=state.stage;$('hasSixthPeriod').checked=state.periodsCount===6;$('hasSections').checked=state.hasSections;$('sectionsCount').value=state.sectionsCount;$('sectionsField').hidden=!state.hasSections;updateSummary();renderGradeSelection();renderSectionCounts();renderWeeklyLoads();}
 function syncSchool(event){
  const oldStage=state.stage;state.schoolName=$('schoolName').value;state.principalName=$('principalName').value;state.stage=$('schoolStage').value;state.hasSections=$('hasSections').checked;state.periodsCount=$('hasSixthPeriod').checked?6:5;
  if(event?.target?.id==='sectionsCount'){state.sectionsCount=boundedCount($('sectionsCount').value);state.sectionCounts[state.stage]=Object.fromEntries(curriculum[state.stage].grades.map(g=>[g,state.sectionsCount]));}
  if(oldStage!==state.stage)$('weeklyGradeSelect').value='';
+ if(oldStage!==state.stage){$('studentSearch').value='';$('scheduleErrors').hidden=true;}renderGradeSelection();
  const demoUpdated=state.demoMode&&!state.manualTeacherStages.includes(state.stage)?refreshDemoTimetable():false;$('sectionsField').hidden=!state.hasSections;updateSummary();renderSectionCounts();renderWeeklyLoads();invalidate();if(demoUpdated)renderGeneratedSchedule();
 }
-function updateSummary(){$('demoNotice').hidden=!state.demoMode;$('periodCount').textContent=getPeriods(state).length;$('schoolMiniName').textContent=state.schoolName||'مدرستك';$('gradeCount').textContent=curriculum[state.stage].grades.length;$('classCount').textContent=buildClasses(state).length;$('stageGradesPreview').innerHTML=curriculum[state.stage].grades.map(g=>`<span>${escapeHTML(g)}</span>`).join('');}
-function renderSectionCounts(){$('perGradeSections').hidden=!state.hasSections;$('gradeSectionsList').innerHTML=curriculum[state.stage].grades.map(g=>`<label class="section-setting"><span>${escapeHTML(g)}</span><select data-section-grade="${escapeHTML(g)}" aria-label="عدد شعب ${escapeHTML(g)}">${sectionLetters.map((letter,i)=>`<option value="${i+1}" ${sectionCountForGrade(state,g)===i+1?'selected':''}>${i+1} · ${sectionLetters.slice(0,i+1).join('، ')}</option>`).join('')}</select></label>`).join('');}
-function selectedWeeklyGrade(){const value=$('weeklyGradeSelect').value;return curriculum[state.stage].grades.includes(value)?value:curriculum[state.stage].grades[0];}
+function updateSummary(){$('demoNotice').hidden=!state.demoMode;$('periodCount').textContent=getPeriods(state).length;$('schoolMiniName').textContent=state.schoolName||'مدرستك';$('gradeCount').textContent=activeGrades().length;$('classCount').textContent=buildClasses(state).length;$('stageGradesPreview').innerHTML=activeGrades().map(g=>`<span>${escapeHTML(g)}</span>`).join('');}
+function renderSectionCounts(){$('perGradeSections').hidden=!state.hasSections;$('gradeSectionsList').innerHTML=activeGrades().map(g=>`<label class="section-setting"><span>${escapeHTML(g)}</span><select data-section-grade="${escapeHTML(g)}" aria-label="عدد شعب ${escapeHTML(g)}">${sectionLetters.map((letter,i)=>`<option value="${i+1}" ${sectionCountForGrade(state,g)===i+1?'selected':''}>${i+1} · ${sectionLetters.slice(0,i+1).join('، ')}</option>`).join('')}</select></label>`).join('');}
+function selectedWeeklyGrade(){const value=$('weeklyGradeSelect').value;return activeGrades().includes(value)?value:activeGrades()[0];}
 function renderWeeklyLoads(){
- const grade=selectedWeeklyGrade(),auto=planMode()==='auto';$('planMode').value=planMode();if($('weeklyDetails').dataset.mode!==planMode()){$('weeklyDetails').open=!auto;$('weeklyDetails').dataset.mode=planMode();}$('planModeHint').textContent=auto?'أضف الكادر أولًا. الأعداد أدناه تتحدث تلقائيًا حسب المواد المسندة. لتعديلها اختر الوضع اليدوي.':'أدخل الخطة المعتمدة. يجب أن يساوي مجموع حصص كل صف عدد الأوقات المتاحة للجدول الكامل.';$('suggestWeeklyLoads').hidden=auto;$('copyWeeklyLoads').hidden=auto;$('weeklyGradeSelect').innerHTML=curriculum[state.stage].grades.map(g=>`<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`).join('');$('weeklyGradeSelect').value=grade;quotaInputInvalid=quotaDrafts.size>0;
+ const grade=selectedWeeklyGrade(),auto=planMode()==='auto';$('planMode').value=planMode();if($('weeklyDetails').dataset.mode!==planMode()){$('weeklyDetails').open=!auto;$('weeklyDetails').dataset.mode=planMode();}$('planModeHint').textContent=auto?'أضف الكادر أولًا. الأعداد أدناه تتحدث تلقائيًا حسب المواد المسندة. لتعديلها اختر الوضع اليدوي.':'أدخل الخطة المعتمدة. يجب أن يساوي مجموع حصص كل صف عدد الأوقات المتاحة للجدول الكامل.';$('suggestWeeklyLoads').hidden=auto;$('copyWeeklyLoads').hidden=auto;$('weeklyGradeSelect').innerHTML=activeGrades().map(g=>`<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`).join('');$('weeklyGradeSelect').value=grade;quotaInputInvalid=quotaDrafts.size>0;
  $('weeklyLoadsList').innerHTML=curriculum[state.stage].subjects.map((subject,i)=>`<div class="weekly-row"><label for="weekly-${i}">${escapeHTML(subject)}</label><input id="weekly-${i}" type="text" inputmode="numeric" maxlength="2" autocomplete="off" value="${escapeHTML(quotaDrafts.get(quotaKey(subject,grade))??(weeklyPlan(state,grade)[subject]||0))}" aria-invalid="${quotaDrafts.has(quotaKey(subject,grade))}" ${auto?'readonly aria-readonly="true"':''} data-weekly-subject="${escapeHTML(subject)}" aria-label="عدد حصص ${escapeHTML(subject)} أسبوعيًا"></div>`).join('');updateWeeklySummary();
 }
-function updateWeeklySummary(){const expected=days.length*getPeriods(state).length,grade=selectedWeeklyGrade(),total=curriculum[state.stage].subjects.reduce((sum,s)=>sum+(weeklyPlan(state,grade)[s]||0),0);$('weeklyCountSummary').textContent=quotaInputInvalid?'استخدم أعدادًا صحيحة من صفر إلى 30.':`المجموع ${total} من ${expected} حصة أسبوعيًا${total===expected?' · مكتمل':total<expected?` · ${expected-total} حصة ستبقى فارغة`:' · خفّض الأعداد الزائدة'}`;$('weeklyCountSummary').classList.toggle('error',quotaInputInvalid||total>expected);$('weeklyCountSummary').classList.toggle('partial',!quotaInputInvalid&&total<expected);$('weeklyCoverageSummary').innerHTML=curriculum[state.stage].grades.map(g=>{const n=curriculum[state.stage].subjects.reduce((sum,s)=>sum+(weeklyPlan(state,g)[s]||0),0);return`<button type="button" class="plan-grade ${n===expected?'complete':''}" data-plan-grade="${escapeHTML(g)}">${escapeHTML(g)} <strong>${n}/${expected}</strong></button>`;}).join('');}
-function changeWeeklyLoad(event){if(planMode()==='auto')return;const input=event.target.closest('[data-weekly-subject]');if(!input)return;const normalized=normalizeNumber(input.value),value=Number(normalized),valid=(normalized===''||/^\d{1,2}$/.test(normalized))&&Number.isInteger(value)&&value>=0&&value<=30;input.setAttribute('aria-invalid',String(!valid));if(valid)quotaDrafts.delete(quotaKey(input.dataset.weeklySubject));else quotaDrafts.set(quotaKey(input.dataset.weeklySubject),input.value);if(valid){state.weeklyLoads[state.stage]??={};state.weeklyLoads[state.stage][selectedWeeklyGrade()]??={};state.weeklyLoads[state.stage][selectedWeeklyGrade()][input.dataset.weeklySubject]=value;markStageEdited();}quotaInputInvalid=quotaDrafts.size>0;updateWeeklySummary();if(valid)invalidate();}
+function updateWeeklySummary(){const expected=days.length*getPeriods(state).length,grade=selectedWeeklyGrade(),total=curriculum[state.stage].subjects.reduce((sum,s)=>sum+(weeklyPlan(state,grade)[s]||0),0);$('weeklyCountSummary').textContent=quotaInputInvalid?'استخدم أعدادًا صحيحة من صفر إلى 30.':`المجموع ${total} من ${expected} حصة أسبوعيًا${total===expected?' · مكتمل':total<expected?` · ${expected-total} حصة ستبقى فارغة`:' · خفّض الأعداد الزائدة'}`;$('weeklyCountSummary').classList.toggle('error',quotaInputInvalid||total>expected);$('weeklyCountSummary').classList.toggle('partial',!quotaInputInvalid&&total<expected);$('weeklyCoverageSummary').innerHTML=activeGrades().map(g=>{const n=curriculum[state.stage].subjects.reduce((sum,s)=>sum+(weeklyPlan(state,g)[s]||0),0);return`<button type="button" class="plan-grade ${n===expected?'complete':''}" data-plan-grade="${escapeHTML(g)}">${escapeHTML(g)} <strong>${n}/${expected}</strong></button>`;}).join('');}
+function changeWeeklyLoad(event){if(planMode()==='auto')return;const input=event.target.closest('[data-weekly-subject]');if(!input)return;const normalized=normalizeNumber(input.value),value=Number(normalized),valid=(normalized===''||/^\d{1,2}$/.test(normalized))&&Number.isInteger(value)&&value>=0&&value<=30;input.setAttribute('aria-invalid',String(!valid));if(valid)quotaDrafts.delete(quotaKey(input.dataset.weeklySubject));else quotaDrafts.set(quotaKey(input.dataset.weeklySubject),input.value);if(valid){state.weeklyLoads[state.stage]??={};state.weeklyLoads[state.stage][selectedWeeklyGrade()]??={};state.weeklyLoads[state.stage][selectedWeeklyGrade()][input.dataset.weeklySubject]=value;markStageEdited();}quotaInputInvalid=quotaDrafts.size>0;updateWeeklySummary();if(valid)invalidate();else syncPrintStatus();}
 function suggestWeeklyLoads(){const grade=selectedWeeklyGrade(),classes=buildClasses(state).filter(c=>c.baseGrade===grade),subjects=curriculum[state.stage].subjects.filter(s=>activeTeachers().some(t=>t.subject===s&&teacherClassIds(t).some(id=>classes.some(c=>c.id===id))));if(!subjects.length){toast('أضف تكليفات أساتذة لهذا الصف أولًا، أو أدخل الحصص يدويًا.');return;}materializeWeeklyPlans();const slots=days.length*getPeriods(state).length;state.weeklyLoads[state.stage]??={};state.weeklyLoads[state.stage][grade]=Object.fromEntries(curriculum[state.stage].subjects.map(s=>[s,subjects.includes(s)?Math.floor(slots/subjects.length)+(subjects.indexOf(s)<slots%subjects.length?1:0):0]));markStageEdited();invalidate();renderWeeklyLoads();toast('أُضيف توزيع متساوٍ مقترح. عدّله وفق خطة مدرستك قبل التوليد.');}
-function copyWeeklyLoads(){if(quotaInputInvalid){toast('صحح أعداد الحصص أولًا.');return;}const grade=selectedWeeklyGrade(),plan={...weeklyPlan(state,grade)};materializeWeeklyPlans();state.weeklyLoads[state.stage]??={};for(const g of curriculum[state.stage].grades)state.weeklyLoads[state.stage][g]={...plan};markStageEdited();invalidate();updateWeeklySummary();toast('نُسخت أعداد الحصص إلى بقية صفوف المرحلة. راجع ملاءمتها لكل صف.');}
+function copyWeeklyLoads(){if(quotaInputInvalid){toast('صحح أعداد الحصص أولًا.');return;}const grade=selectedWeeklyGrade(),plan={...weeklyPlan(state,grade)};materializeWeeklyPlans();state.weeklyLoads[state.stage]??={};for(const g of activeGrades())state.weeklyLoads[state.stage][g]={...plan};markStageEdited();invalidate();updateWeeklySummary();toast('نُسخت أعداد الحصص إلى بقية صفوف المرحلة. راجع ملاءمتها لكل صف.');}
 function planningReport(config=state,assignments=config.teachers[config.stage]){
  const slots=5*getPeriods(config).length,total=slots*buildClasses(config).length,loads=new Map();
  try{const allocation=allocateLessonJobs(config,assignments),gaps=allocation.gaps;
@@ -896,25 +1039,28 @@ function renderCoverage(){
  $('coverage').innerHTML=`<div class="readiness card"><div class="row between wrap"><h2>ملخص الكادر</h2><span class="pill">${extraCoverageEnabled()?'إسناد تلقائي':'إسناد يدوي'}</span></div><div class="readiness-stats"><span><b>${people}</b> أساتذة</span><span><b>${subjects}</b> مواد</span><span><b>${r.assigned}/${r.total}</b> حصص قابلة للإسناد</span></div>${r.conflicts?`<p class="error">${escapeHTML(r.issues[0])}</p>`:''}</div>`;
  renderWeeklyLoads();
 }
-function renderTeachers(){renderCoverage();const teachers=activeTeachers();$('teachersCount').textContent=new Set(teachers.map(t=>t.personId)).size;$('clearTeachers').hidden=!teachers.length;const query=$('teacherSearch').value.trim();const classes=buildClasses(state);const filtered=teachers.filter(t=>`${teacherLabel(t)} ${t.subject} ${t.grades.join(' ')}`.includes(query));$('teachersList').innerHTML=filtered.map(t=>`<article class="card teacher-card"><div class="teacher-top"><div class="teacher-avatar" aria-hidden="true">${escapeHTML(t.name.replace(/^أ\.\s*/,'').charAt(0))}</div><div class="teacher-name"><h3>${escapeHTML(teacherLabel(t))}</h3><p>${escapeHTML(t.subject)}</p></div><div class="teacher-actions"><button class="icon-only" data-edit="${escapeHTML(t.id)}" aria-label="تعديل ${escapeHTML(teacherLabel(t))}">${icon('edit')}</button><button class="icon-only" data-delete="${escapeHTML(t.id)}" aria-label="حذف ${escapeHTML(teacherLabel(t))}">${icon('trash')}</button></div></div><div class="teacher-grades">${classes.filter(c=>teacherClassIds(t).includes(c.id)).map(c=>`<span>${escapeHTML(c.title)}</span>`).join('')||`<span>${extraCoverageEnabled()?'إسناد تلقائي حسب المادة':'لم تحدد الشعب'}</span>`}</div></article>`).join('');if(!filtered.length)$('teachersList').innerHTML=`<div class="card empty" style="grid-column:1/-1"><div class="icon-tile">${icon('users')}</div><h3>${query?'لا توجد نتائج مطابقة':'أضف أول أستاذ للمرحلة'}</h3><p>${query?'جرّب اسمًا آخر أو اسم المادة.':'أدخل اسم الأستاذ واختر مادته.'}</p>${query?'':`<button class="btn tonal" data-add-teacher>${icon('plus')}إضافة أستاذ</button>`}</div>`;}
+function renderTeachers(){renderCoverage();const teachers=activeTeachers();$('teachersCount').textContent=new Set(teachers.map(t=>t.personId)).size;$('clearTeachers').hidden=!teachers.length;const query=$('teacherSearch').value.trim();const classes=buildClasses(state);const filtered=teachers.filter(t=>`${teacherLabel(t)} ${t.subject} ${t.grades.join(' ')}`.includes(query));$('teachersList').innerHTML=filtered.map(t=>`<article class="card teacher-card"><div class="teacher-top"><div class="teacher-avatar" aria-hidden="true">${escapeHTML(t.name.replace(/^أ\.\s*/,'').charAt(0))}</div><div class="teacher-name"><h3>${escapeHTML(teacherLabel(t))}</h3><p>${escapeHTML(t.subject)}</p></div><div class="teacher-actions"><button class="icon-only" data-edit="${escapeHTML(t.id)}" aria-label="تعديل ${escapeHTML(teacherLabel(t))}">${icon('edit')}</button><button class="icon-only" data-delete="${escapeHTML(t.id)}" aria-label="حذف ${escapeHTML(teacherLabel(t))}">${icon('trash')}</button></div></div><p class="teacher-attendance">${teacherDays(t).length} أيام متاحة · الحد الأقصى ${t.maxWorkDays||5} أيام<br><span>${teacherDays(t).map(d=>days[d]).join('، ')}</span></p><div class="teacher-grades">${classes.filter(c=>teacherClassIds(t).includes(c.id)).map(c=>`<span>${escapeHTML(c.title)}</span>`).join('')||`<span>${extraCoverageEnabled()?'إسناد تلقائي حسب المادة':'لم تحدد الشعب'}</span>`}</div></article>`).join('');if(!filtered.length)$('teachersList').innerHTML=`<div class="card empty" style="grid-column:1/-1"><div class="icon-tile">${icon('users')}</div><h3>${query?'لا توجد نتائج مطابقة':'أضف أول أستاذ للمرحلة'}</h3><p>${query?'جرّب اسمًا آخر أو اسم المادة.':'أدخل اسم الأستاذ واختر مادته.'}</p>${query?'':`<button class="btn tonal" data-add-teacher>${icon('plus')}إضافة أستاذ</button>`}</div>`;}
 function staffPeople(){const people=new Map();for(const list of Object.values(state.teachers))for(const teacher of list)if(!people.has(teacher.personId))people.set(teacher.personId,teacher);return[...people.values()];}
-function openTeacher(id=null){editingId=id;const teacher=id?activeTeachers().find(t=>t.id===id):null;$('teacherDialogTitle').textContent=teacher?'تعديل تكليف الأستاذ':'إضافة أستاذ';$('teacherPersonSelect').innerHTML='<option value="new">أستاذ جديد</option>'+staffPeople().map((t,i)=>`<option value="${escapeHTML(t.personId)}">${escapeHTML(teacherLabel(t))} · ${i+1}</option>`).join('');$('teacherPersonSelect').value=teacher?.personId||'new';$('teacherNameInput').value=teacher?.name||'';$('subjectSelect').innerHTML=curriculum[state.stage].subjects.map(s=>`<option>${escapeHTML(s)}</option>`).join('');$('subjectSelect').value=teacher?.subject||curriculum[state.stage].subjects[0];selectedGrades=new Set(teacher?teacherClassIds(teacher):[]);$('teacherAssignmentsDetails').open=!!selectedGrades.size;$('teacherError').hidden=true;renderGradeChips();updateTeacherHint();openDialog('teacherDialog');}
-function chooseTeacherPerson(){const teacher=staffPeople().find(t=>t.personId===$('teacherPersonSelect').value);$('teacherNameInput').value=teacher?.name||'';$('teacherError').hidden=true;updateTeacherHint();}
+function openTeacher(id=null){editingId=id;const teacher=id?activeTeachers().find(t=>t.id===id):null;$('teacherDialogTitle').textContent=teacher?'تعديل تكليف الأستاذ':'إضافة أستاذ';$('teacherPersonSelect').innerHTML='<option value="new">أستاذ جديد</option>'+staffPeople().map((t,i)=>`<option value="${escapeHTML(t.personId)}">${escapeHTML(teacherLabel(t))} · ${i+1}</option>`).join('');$('teacherPersonSelect').value=teacher?.personId||'new';$('teacherNameInput').value=teacher?.name||'';$('subjectSelect').innerHTML=curriculum[state.stage].subjects.map(s=>`<option>${escapeHTML(s)}</option>`).join('');$('subjectSelect').value=teacher?.subject||curriculum[state.stage].subjects[0];selectedGrades=new Set(teacher?teacherClassIds(teacher):[]);$('teacherAssignmentsDetails').open=!!selectedGrades.size;$('teacherError').hidden=true;renderTeacherAvailability(teacher);renderGradeChips();updateTeacherHint();openDialog('teacherDialog');}
+function chooseTeacherPerson(){const teacher=staffPeople().find(t=>t.personId===$('teacherPersonSelect').value);$('teacherNameInput').value=teacher?.name||'';$('teacherError').hidden=true;renderTeacherAvailability(teacher);updateTeacherHint();}
 function renderGradeChips(){$('gradesSelector').innerHTML=buildClasses(state).map(c=>`<button type="button" class="grade-chip" aria-pressed="${selectedGrades.has(c.id)}" data-grade="${escapeHTML(c.id)}">${escapeHTML(c.title)}</button>`).join('');$('selectAllGrades').textContent=selectedGrades.size===buildClasses(state).length?'إلغاء تحديد الكل':'تحديد الكل';updateTeacherHint();}
 function teacherFormError(message){$('teacherError').textContent=message;$('teacherError').hidden=false;}
 function submitTeacher(event){
  event.preventDefault();const name=tidyName($('teacherNameInput').value),chosen=$('teacherPersonSelect').value;
  if(!name){teacherFormError('اكتب اسم الأستاذ.');return;}
  const current=activeTeachers().find(t=>t.id===editingId),personId=chosen==='new'?uid():chosen,staffLabel=staffPeople().find(t=>t.personId===personId)?.staffLabel||'';
- if(chosen==='new'&&staffPeople().some(t=>t.name===name)){teacherFormError('يوجد أستاذ بهذا الاسم. اختره من قائمة الأساتذة، أو اكتب الاسم الكامل لأستاذ آخر.');return;}
+ if(staffPeople().some(t=>t.personId!==personId&&t.name===name)){teacherFormError('يوجد أستاذ بهذا الاسم. اختره من قائمة الأساتذة، أو اكتب الاسم الكامل لأستاذ آخر.');return;}
  const subject=$('subjectSelect').value,classIds=buildClasses(state).filter(c=>selectedGrades.has(c.id)).map(c=>c.id);
  if(!curriculum[state.stage].subjects.includes(subject)){teacherFormError('اختر المادة الدراسية.');return;}
  const duplicate=activeTeachers().find(t=>t.id!==editingId&&t.personId===personId&&t.subject===subject);
  if(duplicate){teacherFormError('هذه المادة مضافة لهذا الأستاذ. عدّل تكليفه الموجود لإضافة الشعب.');return;}
  const conflict=activeTeachers().find(t=>t.id!==editingId&&t.personId!==personId&&t.subject===subject&&teacherClassIds(t).some(id=>classIds.includes(id)));
  if(conflict){teacherFormError(`هذه المادة مسندة بالفعل إلى ${teacherLabel(conflict)} في إحدى الشعب المختارة. عدّل التكليف الآخر أولًا.`);return;}
- const teacher={id:current?.id||uid(),personId,name,staffLabel,subject,classIds,grades:curriculum[state.stage].grades.filter(g=>buildClasses(state).some(c=>c.baseGrade===g&&classIds.includes(c.id)))};
- for(const [stage,list] of Object.entries(state.teachers))for(const t of list)if(t.personId===personId){t.name=name;t.staffLabel=staffLabel;markStageEdited(stage);}
+ const preserved=(current?.classIds||[]).filter(id=>!buildClasses(state).some(c=>c.id===id));const allClassIds=[...new Set([...preserved,...classIds])];
+ const maxWorkDays=Number($('teacherMaxDays').value),workDays=selectedTeacherDays();
+ if(!workDays.length||workDays.length>maxWorkDays){teacherFormError('اختر يوم دوام واحدًا على الأقل، دون تجاوز الحد الأقصى.');return;}
+ const teacher={id:current?.id||uid(),personId,name,staffLabel,subject,classIds:allClassIds,maxWorkDays,workDays,grades:curriculum[state.stage].grades.filter((_,g)=>allClassIds.some(id=>id.startsWith(`${state.stage}-${g}-`)))};
+ for(const [stage,list] of Object.entries(state.teachers))for(const t of list)if(t.personId===personId){t.name=name;t.staffLabel=staffLabel;t.maxWorkDays=maxWorkDays;t.workDays=[...workDays];markStageEdited(stage);}
  const index=activeTeachers().findIndex(t=>t.id===editingId);if(index<0)activeTeachers().push(teacher);else activeTeachers()[index]=teacher;
  if(!classIds.length){state.extraCoverage=true;syncExtraCoverageControls();}
  state.manualTeacherStages=[...new Set([...state.manualTeacherStages,state.stage])];invalidate();renderTeachers();closeDialog('teacherDialog');toast(index<0?'تمت إضافة الأستاذ':'تم حفظ التعديلات');
@@ -940,7 +1086,7 @@ function renderGeneratedSchedule(){
 
  $('masterTable').innerHTML=masterTable(generated);const selected=$('classSelect').value;$('classSelect').innerHTML=generated.classes.map(c=>`<option value="${c.id}">${escapeHTML(c.title)}</option>`).join('');if(generated.classes.some(c=>c.id===selected))$('classSelect').value=selected;renderSub();$('largeScheduleNote').hidden=false;$('largeScheduleNote').textContent=generated.classes.length>18?'الجدول الرئيسي كامل في الصفحة الأولى. لكثرة الشعب سيكون الخط أصغر، ويمكن قراءة كل شعبة بوضوح في صفحتها التالية.':'تحميل PDF يجمع الجدول الرئيسي في الصفحة الأولى، ثم جميع جداول الصفوف في الملف نفسه.';switchTab(currentTab);syncPrintStatus();
 }
-function gapReason(reason){return({'unplanned':'لم تحدد المادة','missing-teacher':'دون أستاذ','teacher-capacity':'لا يوجد أستاذ متاح في وقت إضافي'})[reason]||'غير مكتملة';}
+function gapReason(reason){return({'unplanned':'لم تحدد المادة','missing-teacher':'دون أستاذ','teacher-capacity':'لا تكفي حصص الكادر ضمن أيام الدوام المحددة'})[reason]||'غير مكتملة';}
 function presentCell(cell){if(cell._presented)return cell;return cell.unassigned?{...cell,_presented:true,subject:cell.plannedSubject||'غير محددة',teacher:gapReason(cell.reason)}:cell.extra?{...cell,_presented:true,teacher:`${cell.teacher} · إضافية`}:cell;}
 function cellHTML(cell,withTeacher){const c=presentCell(cell);return `<span class="subject ${cell.unassigned?'unassigned':''}">${escapeHTML(c.subject)}</span>${withTeacher||cell.unassigned?`<span class="teacher ${cell.unassigned?'unassigned':''}">${escapeHTML(c.teacher)}</span>`:cell.extra?'<span class="extra-label">إسناد إضافي</span>':''}`;}
 function timetableRows(result){return days.flatMap((day,d)=>getPeriods(result.config).map((period,p)=>({day,dayIndex:d,period,periodIndex:p})));}
@@ -955,16 +1101,16 @@ function switchTab(tab){currentTab=tab;for(const name of ['master','subs']){cons
 let cachedMasterPages=null;
 function currentMasterPages(){if(!generated)return[];if(!cachedMasterPages||cachedMasterPages.result!==generated)cachedMasterPages={result:generated,pages:buildMasterPdfSpecs(generated,pdfMeta(generated.config,generated.createdAt))};return cachedMasterPages.pages;}
 function syncPrintStatus(){
- const students=currentPanel==='students',visible=students||currentPanel==='schedules';$('printToolbar').hidden=!visible;$('printToolbar').querySelector('strong').textContent=canPrintCurrent()?'جاهز للمراجعة والتنزيل':'أنشئ الجدول لتفعيل تحميل PDF';const button=$('downloadPdf');if(pdfExportBusy){button.disabled=true;return;}
+ const students=currentPanel==='students',visible=students||currentPanel==='schedules';$('printToolbar').hidden=!visible;$('printToolbar').querySelector('strong').textContent=canPrintCurrent()?'جاهز للمراجعة والتنزيل':students?'وزّع الطلبة لتفعيل تحميل PDF':'أنشئ الجدول لتفعيل تحميل PDF';const button=$('downloadPdf');if(pdfExportBusy){button.disabled=true;return;}
  button.querySelector('span').textContent=students?'تحميل PDF':'تحميل الجداول PDF';
  if(students){const record=$('studentEditor').hidden?validStudentDistribution():null;button.disabled=!record;$('printContextInfo').textContent=!$('studentEditor').hidden?'احفظ بيانات الطالب أو ألغِ الإضافة لتفعيل التحميل':record?`${studentGrade()} · ${record.groups.length} شعب · ${distributionPageCount(record)} صفحات PDF`:'وزّع الطلبة لتفعيل تحميل القوائم';}
- else{button.disabled=!generated||isStale;const pages=generated&&!isStale?1+generated.classes.length:0;$('printContextInfo').textContent=pages?`ملف واحد · ${pages} صفحات PDF · الرئيسي ثم جداول الصفوف`:'أنشئ الجداول وفق الحصص والتكليفات لتفعيل التحميل';$('printPageCount').textContent=isStale?'أعد إنشاء الجداول لتطبيق أحدث البيانات':pages?'A4 أفقي · الرئيسي صفحة واحدة، ثم صفحة لكل صف':'A4 أفقي · حدد الحصص والتكليفات ثم أنشئ الجداول';}
+ else{button.disabled=!generated||isStale||quotaInputInvalid;const pages=generated&&!isStale&&!quotaInputInvalid?1+generated.classes.length:0;$('printContextInfo').textContent=quotaInputInvalid?'صحح أعداد الحصص الأسبوعية لتفعيل التحميل':pages?`ملف واحد · ${pages} صفحات PDF · الرئيسي ثم جداول الصفوف`:'أنشئ الجداول وفق الحصص والتكليفات لتفعيل التحميل';$('printPageCount').textContent=isStale?'أعد إنشاء الجداول لتطبيق أحدث البيانات':pages?'A4 أفقي · الرئيسي صفحة واحدة، ثم صفحة لكل صف':'A4 أفقي · حدد الحصص والتكليفات ثم أنشئ الجداول';}
 }
 
-function canPrintCurrent(){return currentPanel==='students'?$('studentEditor').hidden&&!!validStudentDistribution():!!generated&&!isStale;}
+function canPrintCurrent(){return currentPanel==='students'?$('studentEditor').hidden&&!!validStudentDistribution():!!generated&&!isStale&&!quotaInputInvalid;}
 
 function renderStudents(){
- const grade=studentGrade();if(!$('studentEditor').hidden&&editingStudentContext&&(editingStudentContext.stage!==state.stage||editingStudentContext.grade!==grade))closeStudentEditor(false);const bucket=studentBucket();$('clearStudents').hidden=!bucket.list.length;$('studentGradeSelect').innerHTML=curriculum[state.stage].grades.map(g=>`<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`).join('');$('studentGradeSelect').value=grade;$('studentSectionsCount').value=studentSectionCount();$('studentMode').value=bucket.settings.mode;$('studentOrder').innerHTML=bucket.settings.mode==='birth'?'<option value="asc">الأكبر عمرًا أولًا</option><option value="desc">الأصغر عمرًا أولًا</option>':'<option value="desc">الأعلى درجة أولًا</option><option value="asc">الأقل درجة أولًا</option>';$('studentOrder').value=bucket.settings.order;$('studentPattern').value=bucket.settings.pattern;$('studentOrderField').hidden=bucket.settings.mode==='random';$('studentPatternField').hidden=bucket.settings.mode==='random';$('studentCount').textContent=bucket.list.length;$('studentGradeLabel').textContent=grade;$('runDistribution').disabled=!bucket.list.length||!$('studentEditor').hidden;const record=validStudentDistribution(),assignments=new Map();if(record)record.groups.forEach((ids,i)=>ids.forEach(id=>assignments.set(id,sectionLetters[i])));const query=$('studentSearch').value.trim(),filtered=bucket.list.filter(s=>s.name.includes(query));
+ const grade=studentGrade();if(!$('studentEditor').hidden&&editingStudentContext&&(editingStudentContext.stage!==state.stage||editingStudentContext.grade!==grade))closeStudentEditor(false);const bucket=studentBucket();$('clearStudents').hidden=!bucket.list.length;$('studentGradeSelect').innerHTML=activeGrades().map(g=>`<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`).join('');$('studentGradeSelect').value=grade;$('studentSectionsCount').value=studentSectionCount();$('studentMode').value=bucket.settings.mode;$('studentOrder').innerHTML=bucket.settings.mode==='birth'?'<option value="asc">الأكبر عمرًا أولًا</option><option value="desc">الأصغر عمرًا أولًا</option>':'<option value="desc">الأعلى درجة أولًا</option><option value="asc">الأقل درجة أولًا</option>';$('studentOrder').value=bucket.settings.order;$('studentPattern').value=bucket.settings.pattern;$('studentOrderField').hidden=bucket.settings.mode==='random';$('studentPatternField').hidden=bucket.settings.mode==='random';$('studentCount').textContent=bucket.list.length;$('studentGradeLabel').textContent=grade;$('runDistribution').disabled=!bucket.list.length||!$('studentEditor').hidden;const record=validStudentDistribution(),assignments=new Map();if(record)record.groups.forEach((ids,i)=>ids.forEach(id=>assignments.set(id,sectionLetters[i])));const query=$('studentSearch').value.trim(),filtered=bucket.list.filter(s=>s.name.includes(query));
  $('studentList').innerHTML=filtered.length?`<div class="table-scroll roster-scroll"><table class="student-list-table"><thead><tr><th>اسم الطالب</th><th>الدرجة</th><th>المواليد</th><th>الشعبة</th><th><span class="sr-only">إجراءات</span></th></tr></thead><tbody>${filtered.map(s=>`<tr><th scope="row">${escapeHTML(s.name)}</th><td>${s.score===null?'—':escapeHTML(s.score)}</td><td>${s.birthYear===null?'—':escapeHTML(s.birthYear)}</td><td>${assignments.has(s.id)?`<span class="pill">${assignments.get(s.id)}</span>`:'—'}</td><td><div class="teacher-actions"><button class="icon-only" data-student-edit="${escapeHTML(s.id)}" aria-label="تعديل الطالب ${escapeHTML(s.name)}">${icon('edit')}</button><button class="icon-only" data-student-delete="${escapeHTML(s.id)}" aria-label="حذف الطالب ${escapeHTML(s.name)}">${icon('trash')}</button></div></td></tr>`).join('')}</tbody></table></div>`:`<div class="empty"><div class="icon-tile">${icon('student')}</div><h3>${query?'لا توجد أسماء مطابقة':'أضف طلبة هذا الصف'}</h3><p>${query?'جرّب البحث بجزء من الاسم.':'يكفي اسم الطالب. يمكنك ترك الدرجة والمواليد فارغتين.'}</p>${query?'':`<button class="btn tonal" data-add-student>${icon('plus')}إضافة طالب</button>`}</div>`;
  const missing=bucket.settings.mode==='score'?bucket.list.filter(s=>s.score===null).length:bucket.settings.mode==='birth'?bucket.list.filter(s=>s.birthYear===null).length:0,modeText=bucket.settings.mode==='random'?'تُخلط الأسماء عشوائيًا وتُوزّع بأعداد متقاربة.':bucket.settings.pattern==='balanced'?(bucket.settings.mode==='birth'?'يُرتّب الطلبة حسب المواليد ثم يُوزّعون بالتناوب لتتقارب الأعمار بين الشعب.':'يُرتّب الطلبة حسب الدرجة ثم يُوزّعون بالتناوب لتتقارب مستويات الشعب.'):'يُرتّب الطلبة ثم تُجمع كل مجموعة متتابعة في شعبة مستقلة.';
  $('studentMethodNote').textContent=modeText+(missing?` يوجد ${missing} طلبة دون ${bucket.settings.mode==='score'?'درجة':'سنة ميلاد'}، ويُوزّعون بعد البيانات المكتملة.`:'');$('studentStaleNotice').hidden=!bucket.distribution||!!record;renderStudentResults(record);syncPrintStatus();
@@ -1010,8 +1156,10 @@ function init(){
  for(const id of ['schoolStage','hasSections','sectionsCount','hasSixthPeriod'])$(id).addEventListener('change',event=>{syncSchool(event);$('teacherSearch').value='';renderTeachers();});
  $('gradeSectionsList').onchange=e=>{const select=e.target.closest('[data-section-grade]');if(!select)return;state.sectionCounts[state.stage]??={};state.sectionCounts[state.stage][select.dataset.sectionGrade]=boundedCount(select.value);refreshDemoTimetable();updateSummary();invalidate();renderGeneratedSchedule();};
  $('planMode').onchange=()=>{clearQuotaDrafts();if($('planMode').value==='manual')materializeWeeklyPlans();else state.planModes[state.stage]='auto';markStageEdited();invalidate();renderWeeklyLoads();renderCoverage();};$('weeklyGradeSelect').onchange=renderWeeklyLoads;$('weeklyLoadsList').oninput=changeWeeklyLoad;$('suggestWeeklyLoads').onclick=suggestWeeklyLoads;$('copyWeeklyLoads').onclick=copyWeeklyLoads;$('weeklyCoverageSummary').onclick=e=>{const b=e.target.closest('[data-plan-grade]');if(b){$('weeklyGradeSelect').value=b.dataset.planGrade;renderWeeklyLoads();}};
+ $('schoolGradesSelector').onchange=changeActiveGrade;$('gradeSelectionActions').onclick=changeGradeGroup;
+ $('teacherMaxDays').onchange=changeTeacherMaxDays;$('teacherWorkDays').onchange=changeTeacherWorkDays;
  $('extraCoverageSchedule').onchange=changeExtraCoverage;syncExtraCoverageControls();$('addTeacher').onclick=()=>openTeacher();$('teacherPersonSelect').onchange=chooseTeacherPerson;$('subjectSelect').onchange=updateTeacherHint;$('teacherForm').onsubmit=submitTeacher;$('teacherSearch').oninput=renderTeachers;$('teachersList').onclick=e=>{const edit=e.target.closest('[data-edit]'),remove=e.target.closest('[data-delete]');if(edit)openTeacher(edit.dataset.edit);if(remove)removeTeacher(remove.dataset.delete);if(e.target.closest('[data-add-teacher]'))openTeacher();};
- $('gradesSelector').onclick=e=>{const button=e.target.closest('[data-grade]');if(!button)return;const id=button.dataset.grade;selectedGrades.has(id)?selectedGrades.delete(id):selectedGrades.add(id);button.setAttribute('aria-pressed',String(selectedGrades.has(id)));$('teacherError').hidden=true;updateTeacherHint();};$('selectAllGrades').onclick=()=>{const all=buildClasses(state);selectedGrades=selectedGrades.size===all.length?new Set():new Set(all.map(c=>c.id));renderGradeChips();};
+ $('gradesSelector').onclick=e=>{const button=e.target.closest('[data-grade]');if(!button)return;const id=button.dataset.grade;selectedGrades.has(id)?selectedGrades.delete(id):selectedGrades.add(id);button.setAttribute('aria-pressed',String(selectedGrades.has(id)));$('selectAllGrades').textContent=selectedGrades.size===buildClasses(state).length?'إلغاء تحديد الكل':'تحديد الكل';$('teacherError').hidden=true;updateTeacherHint();};$('selectAllGrades').onclick=()=>{const all=buildClasses(state);selectedGrades=selectedGrades.size===all.length?new Set():new Set(all.map(c=>c.id));renderGradeChips();};
  $('clearTeachers').onclick=()=>requestDataClear('teachers');$('confirmClear').onclick=confirmDataClear;$('undoButton').onclick=()=>{const fn=undoAction;undoAction=null;if(fn)fn();};
  for(const id of ['generateFromTeachers','generateEmpty','regenerate'])$(id).onclick=()=>generateSchedules();$('useAutoPlan').onclick=()=>{clearQuotaDrafts();state.planModes[state.stage]='auto';markStageEdited();invalidate();renderCoverage();generateSchedules();};$('previewDemo').onclick=openDemoWorkspace;$('leaveDemo').onclick=leaveDemoWorkspace;$('downloadDemoPdf').onclick=downloadDemoPdf;
  $('tab-master').onclick=()=>switchTab('master');$('tab-subs').onclick=()=>switchTab('subs');for(const tab of ['master','subs'])$(`tab-${tab}`).onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?'master':e.key==='End'?'subs':tab==='master'?'subs':'master';switchTab(next);$(`tab-${next}`).focus();}};
@@ -1094,7 +1242,7 @@ function applyAppRoute(saved){
   if(panel==='schedules')switchTab(route.tab==='subs'?'subs':'master');
   if(panel==='students'){
    const editor=route.editor;
-   const valid=editor&&editor.stage===state.stage&&curriculum[state.stage].grades.includes(editor.grade)&&(!editor.id||state.students[state.stage]?.[editor.grade]?.list.some(s=>s.id===editor.id));
+   const valid=editor&&editor.stage===state.stage&&activeGrades().includes(editor.grade)&&(!editor.id||state.students[state.stage]?.[editor.grade]?.list.some(s=>s.id===editor.id));
    if(valid){
     state.studentSelectedGrades[state.stage]=editor.grade;renderStudents();
     if($('studentEditor').hidden||editingStudentId!==(editor.id||null)||editingStudentContext?.grade!==editor.grade)openStudent(editor.id||null);
@@ -1360,7 +1508,7 @@ function buildTimetablePdfSpecs(result){
  const classes=result.classes.map(cls=>({kind:'class',meta,title:'جدول الدروس الأسبوعي',banner:cls.title,periods:[...labels],rows:days.map((day,d)=>[day,...result.data[d][cls.id].map(cell=>{const c=presentCell(cell);return cell.unassigned?`${c.subject}\n${c.teacher}`:cell.extra?`${c.subject}\nإسناد إضافي`:c.subject;})])}));
  return [...buildMasterPdfSpecs(result,meta),...classes];
 }
-function buildPdfPageSpecs(){if(currentPanel==='students')return buildRosterPdfSpecs();return generated&&!isStale?buildTimetablePdfSpecs(generated):[];}
+function buildPdfPageSpecs(){if(currentPanel==='students')return buildRosterPdfSpecs();return generated&&!isStale&&!quotaInputInvalid?buildTimetablePdfSpecs(generated):[];}
 
 function pdfRect(ctx,x,y,w,h,fill='#ffffff',border='#98ab98',line=.15){const s=PDF_MM_SCALE;ctx.fillStyle=fill;ctx.fillRect(x*s,y*s,w*s,h*s);if(border){ctx.strokeStyle=border;ctx.lineWidth=line*s;ctx.strokeRect(x*s,y*s,w*s,h*s)}}
 function pdfFont(ctx,pt,bold=false){ctx.font=`${bold?'700':'400'} ${pt*PDF_MM_SCALE*25.4/72}px JadwaliPDF, Tahoma, Arial, sans-serif`}
@@ -1476,11 +1624,8 @@ function initTheme(){
  apply(document.documentElement.dataset.theme||'light');$('themeToggle').onclick=()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';apply(next);try{localStorage.setItem('jadwali-theme',next)}catch{toast('تغير المظهر لهذه الجلسة. تعذر حفظ التفضيل.')}};
 }
 function updateTeacherHint(){
- const count=selectedGrades.size;if(!count){$('teacherAssignmentHint').textContent='سيُسند الأستاذ تلقائيًا إلى حصص مادته حسب تفرغه.';return;}
- const personId=$('teacherPersonSelect').value==='new'?'preview-person':$('teacherPersonSelect').value,subject=$('subjectSelect').value;
- const config={...state,teachers:{...state.teachers,[state.stage]:[...activeTeachers().filter(t=>t.id!==editingId),{id:'preview',personId,name:'الأستاذ',subject,classIds:[...selectedGrades]}]}};
- const report=planningReport(config),load=report.loads.get(personId)?.load||0;
- $('teacherAssignmentHint').textContent=`${count} شعب مختارة · ${load} حصة أسبوعيًا متوقعة`;
+ const count=selectedGrades.size,workDays=selectedTeacherDays(),capacity=workDays.length*getPeriods(state).length;
+ $('teacherAssignmentHint').textContent=`${workDays.length} أيام دوام متاحة · حتى ${capacity} حصة أسبوعيًا لجميع مواد الأستاذ معًا.${count?` ${count} شعب مختارة.`:' سيُسند الأستاذ إلى حصص مادته داخل أيام دوامه فقط.'}`;
 }
 async function downloadDemoPdf(){
  const button=$('downloadDemoPdf');if(button.disabled)return;button.disabled=true;button.setAttribute('aria-busy','true');
