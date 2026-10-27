@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<meta name="theme-color" content="#176b5b">
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('jadwali-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch{document.documentElement.dataset.theme='light'}</script>
+<meta name="theme-color" content="#17121f">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('jadwali-halloween-theme')==='light'?'light':'dark'}catch{document.documentElement.dataset.theme='dark'}</script>
 <meta name="description" content="جدولي، مساحة بسيطة لتنظيم الكادر التدريسي وإنشاء الجداول المدرسية وطباعتها.">
-<title>جدولي | الجداول المدرسية</title>
+<title>جدولي | هالوين سعيد 🎃</title>
 <!-- Embedded DejaVu-derived font license
 Copyright: Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved. 
  Bitstream Vera is a trademark of Bitstream, Inc.
@@ -391,6 +391,70 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
 .teacher-add-material{font-size:12px;min-height:42px;padding:8px 0}
 .teacher-subject-summary{min-width:0}
 @media(max-width:700px){.subject-assignment{padding:10px}.teacher-subjects>.row{gap:8px}.add-subject{font-size:11px;padding:8px 10px}.subject-picker .remove-subject{width:36px;min-width:36px}.teacher-subjects h3{font-size:14px}}
+/* Halloween colors stay on screen; the existing paper/PDF palette is retained. */
+@media screen{
+ :root{--primary:#a84b18;--primary-dark:#813514;--tonal:#ffe1c5;--canvas:#fff5e9;--surface:#fffcf7;--ink:#342238;--muted:#706174;--line:#e5d7e7;--danger:#b13249;--amber:#835313;--amber-bg:#fff0d2;--soft:#f1e8f7;--control:#fff9f1;--accent-ink:#fff;--season-accent:#7842a0;--shadow:0 10px 35px #55256009;color-scheme:light}
+ html[data-theme=dark]{--primary:#ffb36b;--primary-dark:#ffd5ac;--tonal:#4b2c22;--canvas:#17121f;--surface:#231b2e;--ink:#f8f0fa;--muted:#c6b8cf;--line:#483851;--danger:#ffacb9;--amber:#f5d39a;--amber-bg:#423021;--soft:#32243e;--control:#1c1525;--accent-ink:#2c180d;--season-accent:#cca4f3;--shadow:0 10px 35px #0002;color-scheme:dark}
+ body{background:radial-gradient(ellipse at 0 0,#9b52c215,transparent 45%),radial-gradient(ellipse at 100% 100%,#ef852411,transparent 40%),var(--canvas);background-attachment:fixed}
+ .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
+ .header-brand .brand-logo{width:42px;height:42px;border-radius:15px;flex:none}
+ .header-brand-name{font-size:24px;font-weight:bold;white-space:nowrap}
+ .halloween-greeting{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--primary);border-radius:30px;background:var(--tonal);color:var(--primary-dark);font-size:12px;font-weight:bold;white-space:nowrap}
+ .brand-logo{background:var(--primary);color:var(--accent-ink);box-shadow:0 5px 18px #ed86251c}
+ .sidebar,html[data-theme=dark] .sidebar{background:var(--surface);border-color:var(--line)}
+ .sidebar{border-top:3px solid var(--primary)}
+ .sidebar .brand strong{color:var(--primary)}
+ .sidebar .side-tip,html[data-theme=dark] .side-tip{background:var(--soft);color:var(--ink)}
+ .nav-label{color:var(--muted)}
+ .nav-button,html[data-theme=dark] .nav-button{color:var(--muted)}
+ .nav-button.active,.nav-button:hover,html[data-theme=dark] .nav-button.active,html[data-theme=dark] .nav-button:hover{background:var(--tonal);color:var(--primary-dark)}
+ .sidebar .promo-nav-button,.bottom-nav .promo-nav-button,html[data-theme=dark] .sidebar .promo-nav-button,html[data-theme=dark] .bottom-nav .promo-nav-button{color:var(--season-accent)}
+ .sidebar .promo-nav-button:hover,.bottom-nav .promo-nav-button>span,html[data-theme=dark] .sidebar .promo-nav-button:hover,html[data-theme=dark] .bottom-nav .promo-nav-button>span{background:var(--soft)}
+ input,select,.search-wrap input,.switch-row,.weekly-row{background:var(--control);border-color:var(--line)}
+ input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px #ef8b2930}
+ button:focus-visible,a:focus-visible{outline-color:var(--primary)}
+ .btn:not(.outline):not(.text):not(.tonal):not(.danger){color:var(--accent-ink)}
+ .btn:hover{filter:brightness(1.08)}
+ .btn.tonal:hover{background:var(--tonal)}
+ html[data-theme=dark] .btn:not(.outline):not(.text):not(.tonal):not(.danger):hover{background:#ffc28c}
+ .btn.outline,html[data-theme=dark] .btn.outline{border-color:var(--line)}
+ .icon-only:hover,.editor-head .icon-only,dialog .dialog-head .icon-only{background:var(--soft);color:var(--primary)}
+ .icon-tile,.pill,.section-count,.school-avatar,.teacher-avatar,.teacher-card:nth-child(n) .teacher-avatar,.teacher-grades span{background:var(--soft);color:var(--season-accent)}
+ .teacher-grades,dialog .dialog-head,.group-names li{border-color:var(--line)}
+ .step{color:var(--muted)}.step i,.step-line{border-color:var(--line)}.step-line{background:var(--line)}
+ .welcome,html[data-theme=dark] .welcome{background:linear-gradient(125deg,var(--soft),var(--tonal));border:1px solid var(--line)}
+ .welcome p,.summary-note,.summary-card .grade-preview span{color:var(--muted)}
+ .mini-calendar{background:var(--surface);border-color:var(--line);box-shadow:5px 8px 0 var(--tonal)}
+ .mini-calendar:before,.calendar-check{background:var(--primary);color:var(--accent-ink)}
+ .calendar-grid i{background:var(--soft)}.calendar-grid i:nth-child(3n){background:var(--tonal)}
+ .calendar-check{box-shadow:0 0 0 5px var(--soft)}
+ .summary-card,.note:not(.warning),.schedule-actions,.print-info{background:var(--soft);border-color:var(--line);color:var(--ink)}
+ .stat,.grade-preview span,.table-scroll{background:var(--surface);border-color:var(--line)}
+ .schedule-tabs,dialog .dialog-actions{background:var(--control)}
+ .schedule-tab.active{background:var(--tonal);color:var(--primary-dark)}
+ .schedule-table th,.schedule-table .day-cell,.schedule-table .period-cell,.student-list-table thead th{background:var(--soft);color:var(--ink)}
+ .schedule-table .class-cell,html[data-theme=dark] .schedule-table .class-cell{background:var(--control);color:var(--ink)}
+ .schedule-table td,.schedule-table th,.schedule-table .day-last-row td{border-color:var(--line)}
+ .schedule-table .teacher{color:var(--muted)}
+ .grade-chip{background:var(--control);border-color:var(--line);color:var(--muted)}
+ .grade-chip[aria-pressed=true],.plan-grade.complete,html[data-theme=dark] .grade-chip[aria-pressed=true],html[data-theme=dark] .plan-grade.complete{background:var(--tonal);color:var(--primary-dark);border-color:var(--primary)}
+ .bottom-nav,html[data-theme=dark] .bottom-nav{background:var(--surface);border-color:var(--line)}
+ .bottom-nav button{color:var(--muted)}
+ .bottom-nav button.active>span,html[data-theme=dark] .bottom-nav button.active,html[data-theme=dark] .bottom-nav button.active span{background:var(--tonal);color:var(--primary)}
+ .toast{background:var(--ink);color:var(--canvas)}.toast button{color:var(--canvas)}
+ .day-spread-notice{margin-bottom:20px}.day-spread-notice ul{margin:8px 0 0;padding-inline-start:20px}.day-spread-notice li+li{margin-top:8px}
+ dialog::backdrop,.academic-promo::backdrop{background:#0f071bb3}
+ dialog.academic-promo,.academic-promo .promo-head,.academic-promo .promo-body{background:var(--surface);border-color:var(--line)}
+ .promo-kicker,.promo-intro h2,.promo-contact h3{color:var(--ink)}
+ .promo-intro h2 span,.promo-kicker:before{color:var(--primary)}.promo-kicker:before{background:var(--primary)}
+ .promo-description,.promo-service>span:last-child,.promo-contact p,.promo-continue{color:var(--muted)}
+ .promo-service,.promo-contact,.academic-promo .promo-head .icon-only{background:var(--control);border-color:var(--line);color:var(--ink)}
+ .promo-emblem{background:var(--tonal);border-color:var(--line);color:var(--primary)}
+ .promo-emblem .promo-mini-spark{background:var(--soft);color:var(--primary);border-color:var(--surface)}
+ .promo-service-icon,.promo-service:nth-child(n) .promo-service-icon,.promo-continue:hover{background:var(--soft);color:var(--season-accent)}
+ @media(max-width:700px){.header-brand{gap:8px}.header-brand .brand-logo{width:34px;height:34px;border-radius:12px}.header-brand .brand-logo .icon{width:22px;height:22px}.header-brand-name{font-size:21px}.halloween-greeting{padding:5px 8px;font-size:10px}.topbar{gap:8px}.topbar>.row{flex:none}}
+ @media(max-width:360px){.header-brand{gap:6px}.header-brand-name{font-size:19px}.halloween-greeting{font-size:9px;padding-inline:6px}.header-brand .brand-logo{width:30px;height:30px}.topbar .theme-toggle{width:36px;height:36px}}
+}
 </style>
 </head>
 <body>
@@ -427,7 +491,7 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
  <div class="sidebar-bottom"><div class="side-tip"><svg class="icon"><use href="#i-leaf"/></svg><h3>خطوات أقل، تنظيم أكثر</h3><p>أدخل بيانات المدرسة، وأضف الأساتذة، ثم أنشئ الجدول.</p></div></div>
 </aside>
 <main class="main" id="app">
- <header class="topbar"><span class="topbar-title">أهلًا بك في مساحة مدرستك</span><div class="mobile-brand"><div class="brand-logo"><svg class="icon"><use href="#i-calendar"/></svg></div>جدولي</div><div class="row"><button class="icon-only theme-toggle" id="themeToggle" aria-label="تفعيل الوضع الداكن" aria-pressed="false" title="تبديل المظهر">☾</button><div class="school-mini"><span class="school-avatar"><svg class="icon"><use href="#i-school"/></svg></span><span id="schoolMiniName"></span></div></div></header>
+ <header class="topbar"><div class="header-brand"><div class="brand-logo" aria-hidden="true"><svg class="icon"><use href="#i-calendar"/></svg></div><span class="header-brand-name">جدولي</span><span class="halloween-greeting">هالوين سعيد 🎃</span></div><div class="row"><button class="icon-only theme-toggle" id="themeToggle" aria-label="تفعيل الوضع الداكن" aria-pressed="false" title="تبديل المظهر">☾</button><div class="school-mini"><span class="school-avatar"><svg class="icon"><use href="#i-school"/></svg></span><span id="schoolMiniName"></span></div></div></header>
  <div class="schedule-actions" id="printToolbar" hidden aria-label="تحميل PDF للقسم الحالي"><div class="print-toolbar-info"><strong>ملف PDF جاهز للتنزيل</strong><small id="printContextInfo">أنشئ الجداول لتفعيل التحميل</small></div><button class="btn" id="downloadPdf" disabled><svg class="icon"><use href="#i-download"/></svg><span>تحميل PDF</span></button></div>
 
 
@@ -469,6 +533,7 @@ dialog.academic-promo{width:min(492px,calc(var(--dialog-viewport-width,100vw) - 
 </section>
 
  <section id="panel-schedules" class="panel" hidden aria-labelledby="schedulesTitle"><div class="page-heading"><div><div class="eyebrow">الخطوة الثالثة</div><h1 id="schedulesTitle" tabindex="-1">الجداول وPDF</h1><p>الجدول الرئيسي وجداول جميع الصفوف في ملف واحد. راجع النتيجة ثم حمّلها.</p></div></div>
+<div class="note warning day-spread-notice" id="daySpreadNotice" hidden role="status"><div><strong>ملاحظة حول توزيع الأيام</strong><ul id="daySpreadNotes"></ul></div></div>
 <details class="assignment-options"><summary>خيارات الإسناد</summary><div class="switch-row extra-setting"><label for="extraCoverageSchedule"><span><strong>الإسناد التلقائي</strong><small>يغطي الأستاذ حصص مادته في الشعب الأخرى حسب تفرغه.</small></span><input class="switch-input" type="checkbox" role="switch" id="extraCoverageSchedule" checked></label></div></details><div class="schedule-actions" aria-label="إجراءات الجداول"><button class="btn outline" id="regenerate"><svg class="icon"><use href="#i-spark"/></svg><span>إنشاء الجداول</span></button><small id="printPageCount">A4 أفقي · أنشئ الجداول لتفعيل التحميل</small></div><div id="staleNotice" class="note warning" hidden><svg class="icon"><use href="#i-info"/></svg><p>أعد إنشاء الجداول لتطبيق البيانات وقواعد التوزيع الحالية قبل العرض والتحميل.</p></div><div id="scheduleEmpty" class="card empty schedule-empty"><div class="icon-tile"><svg class="icon"><use href="#i-grid"/></svg></div><h3>جدولك المرتّب يبدأ من هنا</h3><p>أنشئ الجداول بعد إدخال بيانات المدرسة والكادر التدريسي.</p><button class="btn" id="generateEmpty"><svg class="icon"><use href="#i-spark"/></svg>إنشاء الجداول الآن</button></div><div id="scheduleResult" hidden><div class="result-stats" id="resultStats"></div><details class="assignment-details" id="extraCoverageResult" hidden><summary id="extraCoverageSummary">تفاصيل الإسناد التلقائي</summary><ul id="extraAssignmentsList"></ul></details><div class="schedule-tabs" role="tablist" aria-label="نوع الجدول"><button class="schedule-tab active" id="tab-master" role="tab" aria-selected="true" aria-controls="masterView">الجدول الرئيسي</button><button class="schedule-tab" id="tab-subs" role="tab" aria-selected="false" aria-controls="subsView" tabindex="-1">جداول الصفوف</button></div><div class="card schedule-panel"><div id="masterView" role="tabpanel" aria-labelledby="tab-master"><div class="schedule-meta"><div><h2>جدول المدرسة الأسبوعي</h2><p>كل صف في عمود، وكل حصة في سطر</p></div><span class="pill"><svg class="icon"><use href="#i-file"/></svg>A4 أفقي · الجدول الرئيسي صفحة واحدة</span></div><p class="muted" style="font-size:10px;margin-bottom:12px">اسحب الجدول أفقيًا لرؤية جميع الصفوف. الجدول الرئيسي كامل في صفحة PDF واحدة.</p><div id="masterTable"></div></div><div id="subsView" role="tabpanel" aria-labelledby="tab-subs" hidden><div class="schedule-controls"><label class="field-label" for="classSelect">اختر الصف</label><select id="classSelect"></select></div><div id="subTable"></div></div></div><p id="largeScheduleNote" class="muted" style="font-size:11px;margin-top:12px" hidden>زر تحميل الجداول PDF يجمع الرئيسي كاملًا في الصفحة الأولى، ثم جدول كل صف في صفحة مستقلة ضمن الملف نفسه.</p></div><div class="welcome"><div><span class="eyebrow">ابدأ بنظرة على النتيجة</span><h2>جدول مدرستك، بخطوات واضحة.</h2><p>جرّب مثالًا كاملًا قبل إدخال بياناتك. الجدول الرئيسي في صفحة واحدة، وجداول الصفوف بعده في ملف PDF واحد.</p><div class="row wrap demo-actions"><button class="btn" id="downloadDemoPdf"><svg class="icon"><use href="#i-download"/></svg><span>تحميل جدول تجريبي PDF</span></button><button class="btn outline" id="previewDemo">معاينة وتجربة المثال</button></div><small>تنزيل المثال لا يغيّر بياناتك.</small></div><div class="welcome-visual" aria-hidden="true"><div class="mini-calendar"><div class="calendar-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><span class="calendar-check"><svg class="icon"><use href="#i-check"/></svg></span></div></div></section>
 </main>
 <nav class="bottom-nav" aria-label="التنقل على الهاتف"><button class="active" data-panel="school"><span><svg class="icon"><use href="#i-school"/></svg></span>المدرسة</button><button data-panel="teachers"><span><svg class="icon"><use href="#i-users"/></svg></span>الأساتذة</button><button data-panel="students"><span><svg class="icon"><use href="#i-student"/></svg></span>الطلبة</button><button data-panel="schedules"><span><svg class="icon"><use href="#i-grid"/></svg></span>الجداول</button><button type="button" class="promo-nav-button" id="openAcademicPromo" aria-haspopup="dialog" aria-controls="academicPromoDialog"><span><svg class="icon" aria-hidden="true"><use href="#i-promo-telegram"/></svg></span>قناة تليجرام</button></nav>
@@ -530,8 +595,8 @@ const STORAGE_KEY='jadwali-school-v2';
 const DEMO_STORAGE_KEY='jadwali-demo-v1';
 const WORKSPACE_MODE_KEY='jadwali-workspace-mode-v1';
 const WORKSPACE_STORAGE_KEY='jadwali-workspace-v1';
-// Rebuild cached schedules made before fair multi-subject allocation.
-const TIMETABLE_VERSION=6;
+// Older timetables must be regenerated with subject/day limits.
+const TIMETABLE_VERSION=7;
 const $=id=>document.getElementById(id);
 const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon=name=>`<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
@@ -740,7 +805,7 @@ function cleanState(raw){
 }
 function cleanSavedSchedule(raw){
  try{
-  if(!raw||![4,5,TIMETABLE_VERSION].includes(raw.version)||!raw.config||!Object.hasOwn(curriculum,raw.config.stage)||typeof raw.signature!=='string'||!Number.isFinite(Date.parse(raw.createdAt)))return null;
+  if(!raw||![4,5,6,TIMETABLE_VERSION].includes(raw.version)||!raw.config||!Object.hasOwn(curriculum,raw.config.stage)||typeof raw.signature!=='string'||!Number.isFinite(Date.parse(raw.createdAt)))return null;
   const config=snapshotScheduleConfig(raw.config),classes=buildClasses(config),data={},subjects=curriculum[config.stage].subjects;
   if(!Array.isArray(raw.classes)||JSON.stringify(raw.classes)!==JSON.stringify(classes))return null;
   for(let d=0;d<days.length;d++){data[d]={};for(const cls of classes){
@@ -766,6 +831,7 @@ function cleanSavedSchedule(raw){
   }
   for(let d=0;d<5;d++)for(let p=0;p<getPeriods(config).length;p++){const ids=classes.map(c=>data[d][c.id][p]).filter(c=>!c.unassigned).map(c=>c.teacherId);if(new Set(ids).size!==ids.length)return null;}
   for(const cls of classes){const counts={},plan=weeklyPlan(config,cls.baseGrade);let unplanned=0;for(let d=0;d<5;d++)for(const cell of data[d][cls.id]){if(cell.reason==='unplanned'){unplanned++;continue;}const subject=cell.unassigned?cell.plannedSubject:cell.subject;counts[subject]=(counts[subject]||0)+1;}for(const subject of subjects)if((counts[subject]||0)!==(plan[subject]||0))return null;const planned=subjects.reduce((n,s)=>n+(plan[s]||0),0);if(unplanned!==5*getPeriods(config).length-planned)return null;}
+  if(raw.version===TIMETABLE_VERSION&&!validLessonDaySpread(data,classes,signed[1]))return null;
   const signature=JSON.stringify([config,signed[1].map(t=>({id:t.id,personId:t.personId,name:t.name,staffLabel:t.staffLabel||'',subject:t.subject,classIds:[...t.classIds].sort(),maxWorkDays:t.maxWorkDays||5,workDays:teacherDays(t)})).sort((a,b)=>a.id.localeCompare(b.id))]);
   return{version:raw.version===TIMETABLE_VERSION?TIMETABLE_VERSION:5,classes,data,extraCount:Object.values(data).reduce((n,day)=>n+Object.values(day).flat().filter(c=>c.extra&&!c.unassigned).length,0),config,createdAt:raw.createdAt,signature,shortages:[...shortages.values()],unassigned:[...shortages.values()].reduce((n,s)=>n+s.count,0)};
  }catch{return null;}
@@ -806,139 +872,153 @@ function toast(message,undo=null){clearTimeout(toastTimer);$('toastText').textCo
 function scheduleNeedsUpdate(result,config=state,assignments=config.teachers?.[config.stage]||[]){return!!result&&(result.version!==TIMETABLE_VERSION||result.signature!==scheduleSignature(config,assignments));}
 function invalidate(){if(generated){isStale=scheduleNeedsUpdate(generated);$('staleNotice').hidden=!isStale;}$('printRoot').innerHTML='';if(isStale)renderGeneratedSchedule();saveState();syncPrintStatus();}
 
-// Lessons are edges between a class and a person. Missing staff and excess
-// teaching demand become blank cells. Perfect matchings schedule every
-// remaining lesson exactly once without booking a person twice.
-function spreadScheduleDays(data,classes,periods,attendance=null){
- const allowed=(cell,day)=>cell.unassigned||!attendance||attendance.get(cell.teacherId)?.includes(day);
- const canSwap=(ci,a,b)=>allowed(cellAt(ci,a),Math.floor(b/periods))&&allowed(cellAt(ci,b),Math.floor(a/periods));
- const slots=5*periods,subject=cell=>cell.unassigned?cell.plannedSubject:cell.subject;
- const counts=classes.map(cls=>Array.from({length:5},(_,d)=>{const map=new Map();for(const cell of data[d][cls.id]){const key=subject(cell);map.set(key,(map.get(key)||0)+1);}return map;}));
- const cellAt=(ci,t)=>data[Math.floor(t/periods)][classes[ci].id][t%periods];
- const busy=Array.from({length:slots},(_,t)=>new Set(classes.map((_,ci)=>cellAt(ci,t)).filter(c=>!c.unassigned).map(c=>c.teacherId)));
- const delta=(ci,a,b)=>{const da=Math.floor(a/periods),db=Math.floor(b/periods),sa=subject(cellAt(ci,a)),sb=subject(cellAt(ci,b));if(da===db||sa===sb)return 0;
-  return 2*((counts[ci][da].get(sb)||0)-(counts[ci][da].get(sa)||0)+(counts[ci][db].get(sa)||0)-(counts[ci][db].get(sb)||0))+4;
- };
- const swap=(ci,a,b)=>{
-  const da=Math.floor(a/periods),db=Math.floor(b/periods),ca=cellAt(ci,a),cb=cellAt(ci,b),sa=subject(ca),sb=subject(cb);
-  if(!ca.unassigned)busy[a].delete(ca.teacherId);if(!cb.unassigned)busy[b].delete(cb.teacherId);
-  data[da][classes[ci].id][a%periods]=cb;data[db][classes[ci].id][b%periods]=ca;
-  if(!cb.unassigned)busy[a].add(cb.teacherId);if(!ca.unassigned)busy[b].add(ca.teacherId);
-  for(const [day,from,to]of [[da,sa,sb],[db,sb,sa]]){counts[ci][day].set(from,(counts[ci][day].get(from)||0)-1);counts[ci][day].set(to,(counts[ci][day].get(to)||0)+1);}
- };
- // Every move strictly reduces daily concentration and retains all weekly quotas.
- // Individual moves check teacher occupancy. Whole-school moves preserve it by construction.
- for(let pass=0;pass<24;pass++){
-  let changed=false;
-  for(let ci=0;ci<classes.length;ci++){
-   let best=null,score=0;for(let a=0;a<slots;a++)for(let b=a+1;b<slots;b++){
-    if(!canSwap(ci,a,b))continue;const change=delta(ci,a,b);if(change>=score)continue;const ca=cellAt(ci,a),cb=cellAt(ci,b);
-    if(!ca.unassigned&&busy[b].has(ca.teacherId)&&ca.teacherId!==cb.teacherId)continue;
-    if(!cb.unassigned&&busy[a].has(cb.teacherId)&&cb.teacherId!==ca.teacherId)continue;
-    best=[a,b];score=change;
-   }if(best){swap(ci,...best);changed=true;}
-  }
-  let best=null,score=0;for(let a=0;a<slots;a++)for(let b=a+1;b<slots;b++){
-   if(!classes.every((_,ci)=>canSwap(ci,a,b)))continue;const change=classes.reduce((n,_,ci)=>n+delta(ci,a,b),0);if(change<score){score=change;best=[a,b];}
-  }
-  if(best){for(let ci=0;ci<classes.length;ci++)swap(ci,...best);busy[best[0]]=new Set(classes.map((_,ci)=>cellAt(ci,best[0])).filter(c=>!c.unassigned).map(c=>c.teacherId));busy[best[1]]=new Set(classes.map((_,ci)=>cellAt(ci,best[1])).filter(c=>!c.unassigned).map(c=>c.teacherId));changed=true;}
-  if(!changed)break;
- }
-}
-
-function createUnrestrictedSchedule(config,assignments,random=Math.random){
- const classes=buildClasses(config),allocation=allocateLessonJobs(config,assignments),slots=allocation.slots,jobs=allocation.jobs,people=new Map();
- const gaps=new Map(classes.map(c=>[c.id,[]]));for(const gap of allocation.gaps)gaps.get(gap.classId).push({...gap,remaining:gap.count});
- for(const job of jobs)if(!people.has(job.personId))people.set(job.personId,{id:job.personId,name:job.teacher});
- const persons=[...people.values()],n=Math.max(classes.length,persons.length),matrix=Array.from({length:n},()=>new Map());
- const classIndex=new Map(classes.map((c,i)=>[c.id,i])),personIndex=new Map(persons.map((p,i)=>[p.id,i]));
- const leftDegrees=Array(n).fill(0),rightDegrees=Array(n).fill(0);
- function add(l,r,count,job=null){if(!count)return;let pair=matrix[l].get(r);if(!pair){pair={count:0,jobs:[]};matrix[l].set(r,pair);}pair.count+=count;if(job)pair.jobs.push({...job,remaining:count});leftDegrees[l]+=count;rightDegrees[r]+=count;}
- for(const job of jobs)add(classIndex.get(job.classId),personIndex.get(job.personId),job.count,job);
- let r=0;
- for(let l=0;l<n;l++){while(leftDegrees[l]<slots){while(r<n&&rightDegrees[r]===slots)r++;if(r===n)throw new Error('تعذر موازنة الجدول. راجع أعداد الحصص.');add(l,r,Math.min(slots-leftDegrees[l],slots-rightDegrees[r]));}}
- const data={},daily={};
- for(let d=0;d<5;d++){data[d]={};daily[d]={};for(const cls of classes){data[d][cls.id]=[];daily[d][cls.id]={};}}
- for(let slot=0;slot<slots;slot++){
-  const d=Math.floor(slot/getPeriods(config).length),p=slot%getPeriods(config).length;
-  const candidates=matrix.map((row,l)=>{
-   const options=shuffled([...row.entries()].filter(([,pair])=>pair.count>0),random);
-   if(l<classes.length)options.sort((a,b)=>{
-    const score=pair=>{const available=pair.jobs.filter(j=>j.remaining);return available.length?Math.min(...available.map(j=>(daily[d][classes[l].id][j.subject]||0)*100-j.remaining)):10000;};
-    return score(a[1])-score(b[1]);
-   });return options.map(([right])=>right);
-  });
-  const occupied=Array(n).fill(-1),matched=Array(n).fill(-1);
-  function assign(l,seen){for(const right of candidates[l]){if(seen.has(right))continue;seen.add(right);if(occupied[right]===-1||assign(occupied[right],seen)){occupied[right]=l;matched[l]=right;return true;}}return false;}
-  const order=[...Array(n).keys()],offset=slot%classes.length;order.splice(0,classes.length,...Array.from({length:classes.length},(_,i)=>(i+offset)%classes.length));
-  for(const l of order)if(!assign(l,new Set()))throw new Error('تعذر إكمال توزيع الأوقات. راجع الإعدادات.');
-  for(let l=0;l<n;l++){
-   const pair=matrix[l].get(matched[l]);pair.count--;if(l>=classes.length)continue;
-   const cls=classes[l],available=shuffled(pair.jobs.filter(j=>j.remaining),random);
-   available.sort((a,b)=>(daily[d][cls.id][a.subject]||0)-(daily[d][cls.id][b.subject]||0)||b.remaining-a.remaining);
-   let subject;
-   if(available.length){const job=available[0];job.remaining--;subject=job.subject;data[d][cls.id][p]={subject,teacher:job.teacher,teacherId:job.personId,...(job.extra?{extra:true}:{})};}
-   else{
-    const unfilled=shuffled(gaps.get(cls.id).filter(g=>g.remaining),random);unfilled.sort((a,b)=>(daily[d][cls.id][a.subject]||0)-(daily[d][cls.id][b.subject]||0)||b.remaining-a.remaining);
-    const gap=unfilled[0];if(!gap)throw new Error('تعذر مطابقة الحصص المتبقية مع الخطة.');gap.remaining--;subject=gap.subject;
-    data[d][cls.id][p]={subject:'',teacher:'',teacherId:'',unassigned:true,plannedSubject:subject,reason:gap.reason};
-   }
-   daily[d][cls.id][subject]=(daily[d][cls.id][subject]||0)+1;
-  }
- }
- spreadScheduleDays(data,classes,getPeriods(config).length);
- const shortages=classes.flatMap(cls=>gaps.get(cls.id).map(g=>({classId:cls.id,subject:g.subject,count:g.count,reason:g.reason})));
- return{version:TIMETABLE_VERSION,classes,data,extraCount:allocation.extraCount,unassigned:shortages.reduce((n,g)=>n+g.count,0),shortages,config:snapshotScheduleConfig(config),signature:scheduleSignature(config,assignments),createdAt:new Date().toISOString()};
-}
-
-// Assign lessons to attendance days first. Each day's bipartite graph can then
-// be colored into periods without any teacher or class collisions.
-function splitJobsByDay(config,jobs,assignments,random){
- const periods=getPeriods(config).length,classes=buildClasses(config),classIndex=new Map(classes.map((c,i)=>[c.id,i])),people=[...new Map(assignments.map(t=>[t.personId||t.id,t])).values()],personIndex=new Map(people.map((t,i)=>[t.personId||t.id,i])),allowed=people.map(teacherDays);
- const tokens=jobs.flatMap((job,jobIndex)=>Array.from({length:job.count},()=>({jobIndex,ci:classIndex.get(job.classId),pi:personIndex.get(job.personId),day:-1})));
- const byClass=classes.map(()=>[]),byPerson=people.map(()=>[]);tokens.forEach((t,i)=>{byClass[t.ci].push(i);byPerson[t.pi].push(i);});
+// Count a subject across all its teachers in the same class. The daily limit
+// is one for four lessons with four/five available days. A higher limit is
+// allowed only when weekly demand or actual attendance makes it necessary.
+function lessonDayGroups(jobs,assignments){
+ const masks=new Map(assignments.map(t=>[t.personId||t.id,teacherDays(t).reduce((mask,d)=>mask|(1<<d),0)])),groups=[],indices=new Map(),jobGroups=[];
  const bitCount=mask=>{let count=0;for(;mask;mask>>=1)count+=mask&1;return count;};
- const masks=allowed.map(ds=>ds.reduce((mask,d)=>mask|(1<<d),0));
+ jobs.forEach((job,i)=>{
+  const key=JSON.stringify([job.classId,job.subject]);
+  if(!indices.has(key)){indices.set(key,groups.length);groups.push({classId:job.classId,subject:job.subject,count:0,limit:1,jobs:[]});}
+  const gi=indices.get(key),group=groups[gi],mask=masks.get(job.personId);
+  if(!mask)throw new Error(`حدد أيام دوام أستاذ مادة ${job.subject} قبل إنشاء الجدول.`);
+  group.count+=job.count;group.jobs.push({count:job.count,mask});jobGroups[i]=gi;
+ });
+ // Check every subset of the five days, including overlapping attendance
+ // windows of different teachers sharing a subject (not just their union).
+ for(const group of groups)for(let mask=1;mask<32;mask++){
+  const demand=group.jobs.reduce((n,j)=>n+((j.mask&mask)===j.mask?j.count:0),0);
+  group.limit=Math.max(group.limit,Math.ceil(demand/bitCount(mask)));
+ }
+ return{groups,jobGroups};
+}
+
+function validLessonDaySpread(data,classes,assignments){
+ const jobs=new Map(),daily=new Map();
+ for(const cls of classes)for(let d=0;d<days.length;d++)for(const cell of data[d][cls.id])if(!cell.unassigned){
+  const key=JSON.stringify([cls.id,cell.subject,cell.teacherId]),groupKey=JSON.stringify([cls.id,cell.subject]);
+  if(!jobs.has(key))jobs.set(key,{classId:cls.id,subject:cell.subject,personId:cell.teacherId,count:0});jobs.get(key).count++;
+  if(!daily.has(groupKey))daily.set(groupKey,Array(5).fill(0));daily.get(groupKey)[d]++;
+ }
+ const {groups}=lessonDayGroups([...jobs.values()],assignments);
+ return groups.every(group=>daily.get(JSON.stringify([group.classId,group.subject])).every(count=>count<=group.limit));
+}
+
+// Choose days before periods. Class capacity, shared teacher capacity, and
+// subject/day limits are hard constraints; period coloring then prevents
+// simultaneous bookings without changing a lesson's assigned day.
+function splitJobsByDay(config,jobs,assignments,random=Math.random){
+ const periods=getPeriods(config).length,classes=buildClasses(config),classIndex=new Map(classes.map((c,i)=>[c.id,i])),people=[...new Map(assignments.map(t=>[t.personId||t.id,t])).values()],personIndex=new Map(people.map((t,i)=>[t.personId||t.id,i])),allowed=people.map(teacherDays);
+ const {groups,jobGroups}=lessonDayGroups(jobs,assignments);
+ const tokens=jobs.flatMap((job,jobIndex)=>Array.from({length:job.count},()=>({jobIndex,ci:classIndex.get(job.classId),pi:personIndex.get(job.personId),gi:jobGroups[jobIndex],day:-1})));
+ const byClass=classes.map(()=>[]),byPerson=people.map(()=>[]),byGroup=groups.map(()=>[]);
+ tokens.forEach((t,i)=>{byClass[t.ci].push(i);byPerson[t.pi].push(i);byGroup[t.gi].push(i);});
+ const bitCount=mask=>{let count=0;for(;mask;mask>>=1)count+=mask&1;return count;},masks=allowed.map(ds=>ds.reduce((mask,d)=>mask|(1<<d),0));
  for(let ci=0;ci<classes.length;ci++)for(let mask=1;mask<32;mask++){
   const demand=byClass[ci].filter(i=>(masks[tokens[i].pi]&mask)===masks[tokens[i].pi]).length,capacity=bitCount(mask)*periods;
   if(demand>capacity){const namedDays=days.filter((_,d)=>mask&(1<<d)).join('، ');throw new Error(`${classes[ci].title}: توجد ${demand} حصص محصورة في ${namedDays}، والمتاح ${capacity} فقط. وسّع أيام دوام بعض الأساتذة أو وزّع حصص المادة على أستاذ آخر.`);}
  }
- const penalty=n=>Math.max(0,n-periods)**2,deadline=performance.now()+2200;
- for(let attempt=0;attempt<12;attempt++){
-  const cd=classes.map(()=>Array(5).fill(0)),pd=people.map(()=>Array(5).fill(0));for(const t of tokens)t.day=-1;
+ const penalty=(n,limit)=>Math.max(0,n-limit)**2,deadline=performance.now()+3500;
+ for(let attempt=0;attempt<20;attempt++){
+  const cd=classes.map(()=>Array(5).fill(0)),pd=people.map(()=>Array(5).fill(0)),sd=groups.map(()=>Array(5).fill(0));
+  for(const t of tokens)t.day=-1;
+  const move=(t,d)=>{if(t.day>=0){cd[t.ci][t.day]--;pd[t.pi][t.day]--;sd[t.gi][t.day]--;}t.day=d;cd[t.ci][d]++;pd[t.pi][d]++;sd[t.gi][d]++;};
+  const change=(row,a,b,limit)=>penalty(row[a]-1,limit)+penalty(row[b]+1,limit)-penalty(row[a],limit)-penalty(row[b],limit);
+  const squareChange=(row,a,b)=>2*(row[b]-row[a]+1);
+  const delta=(t,d,u=null)=>{
+   const a=t.day;let hard=0,soft=0;
+   if(!u||t.ci!==u.ci){hard+=change(cd[t.ci],a,d,periods);if(u)hard+=change(cd[u.ci],d,a,periods);}
+   if(!u||t.pi!==u.pi){hard+=change(pd[t.pi],a,d,periods);if(u)hard+=change(pd[u.pi],d,a,periods);}
+   if(!u||t.gi!==u.gi){hard+=change(sd[t.gi],a,d,groups[t.gi].limit);soft+=squareChange(sd[t.gi],a,d);if(u){hard+=change(sd[u.gi],d,a,groups[u.gi].limit);soft+=squareChange(sd[u.gi],d,a);}}
+   return{hard,soft};
+  };
   const personOrder=shuffled(people.map((_,i)=>i),random).sort((a,b)=>allowed[a].length-allowed[b].length||byPerson[b].length/allowed[b].length-byPerson[a].length/allowed[a].length);
-  // Max-flow for each teacher avoids filling a class's day unnecessarily.
+  // Route each teacher's subject groups through shared class/day nodes.
+  // Unit edges prefer a different day before a second lesson on the same day.
   for(const pi of personOrder){
    if(!byPerson[pi].length)continue;
-   const cis=shuffled([...new Set(byPerson[pi].map(i=>tokens[i].ci))],random),source=0,dayStart=1+cis.length,sink=dayStart+5,graph=Array.from({length:sink+1},()=>[]),links=[];
+   const gis=shuffled([...new Set(byPerson[pi].map(i=>tokens[i].gi))],random),cis=[...new Set(byPerson[pi].map(i=>tokens[i].ci))];
+   const source=0,classDayStart=1+gis.length,dayStart=classDayStart+cis.length*5,sink=dayStart+5,graph=Array.from({length:sink+1},()=>[]),links=[];
    const add=(u,v,cap)=>{const edge={to:v,cap,initial:cap,rev:graph[v].length};graph[u].push(edge);graph[v].push({to:u,cap:0,rev:graph[u].length-1});return edge;};
-   cis.forEach((ci,i)=>{const ids=shuffled(byPerson[pi].filter(id=>tokens[id].ci===ci),random);add(source,i+1,ids.length);for(const d of shuffled(allowed[pi],random)){const edge=add(i+1,dayStart+d,Math.max(0,periods-cd[ci][d]));links.push({ci,d,edge});}});
+   gis.forEach((gi,i)=>{
+    const ids=byPerson[pi].filter(id=>tokens[id].gi===gi),ci=tokens[ids[0]].ci;add(source,i+1,ids.length);
+    const ordered=shuffled(allowed[pi],random).sort((a,b)=>sd[gi][a]-sd[gi][b]||cd[ci][a]-cd[ci][b]);
+    for(let layer=0;layer<groups[gi].limit;layer++)for(const d of ordered)if(sd[gi][d]+layer<groups[gi].limit)links.push({gi,d,edge:add(i+1,classDayStart+cis.indexOf(ci)*5+d,1)});
+   });
+   cis.forEach((ci,i)=>{for(const d of allowed[pi])add(classDayStart+i*5+d,dayStart+d,Math.max(0,periods-cd[ci][d]));});
    for(const d of allowed[pi])add(dayStart+d,sink,periods);
-   for(;;){const prev=Array(graph.length).fill(null),queue=[source];prev[source]=[-1,-1];for(let q=0;q<queue.length&&!prev[sink];q++){const u=queue[q];graph[u].forEach((e,i)=>{if(e.cap>0&&!prev[e.to]){prev[e.to]=[u,i];queue.push(e.to);}});}if(!prev[sink])break;let amount=Infinity;for(let v=sink;v!==source;v=prev[v][0]){const [u,i]=prev[v];amount=Math.min(amount,graph[u][i].cap);}for(let v=sink;v!==source;v=prev[v][0]){const [u,i]=prev[v],e=graph[u][i];e.cap-=amount;graph[v][e.rev].cap+=amount;}}
-   for(const {ci,d,edge}of links){let count=edge.initial-edge.cap;for(const id of byPerson[pi]){const t=tokens[id];if(count&&t.ci===ci&&t.day===-1){t.day=d;cd[ci][d]++;pd[pi][d]++;count--;}}}
-   for(const id of shuffled(byPerson[pi],random)){const t=tokens[id];if(t.day!==-1)continue;const choices=shuffled(allowed[pi],random).filter(d=>pd[pi][d]<periods);if(!choices.length)throw new Error('حصص الأستاذ تتجاوز أيام دوامه. راجع تكليفاته.');choices.sort((a,b)=>cd[t.ci][a]-cd[t.ci][b]);t.day=choices[0];cd[t.ci][t.day]++;pd[pi][t.day]++;}
+   for(;;){
+    const prev=Array(graph.length).fill(null),queue=[source];prev[source]=[-1,-1];
+    for(let q=0;q<queue.length&&!prev[sink];q++){const u=queue[q];graph[u].forEach((e,i)=>{if(e.cap>0&&!prev[e.to]){prev[e.to]=[u,i];queue.push(e.to);}});}
+    if(!prev[sink])break;
+    let amount=Infinity;for(let v=sink;v!==source;v=prev[v][0]){const [u,i]=prev[v];amount=Math.min(amount,graph[u][i].cap);}
+    for(let v=sink;v!==source;v=prev[v][0]){const [u,i]=prev[v],e=graph[u][i];e.cap-=amount;graph[v][e.rev].cap+=amount;}
+   }
+   for(const {gi,d,edge}of links){let count=edge.initial-edge.cap;for(const id of byPerson[pi]){const t=tokens[id];if(count&&t.gi===gi&&t.day===-1){move(t,d);count--;}}}
+   // A later teacher can need an occupied day. Place their remaining lessons
+   // provisionally; joint repair below moves earlier lessons when necessary.
+   for(const id of shuffled(byPerson[pi],random)){
+    const t=tokens[id];if(t.day!==-1)continue;
+    const choices=shuffled(allowed[pi],random).filter(d=>pd[pi][d]<periods);
+    if(!choices.length)throw new Error('حصص الأستاذ تتجاوز أيام دوامه. راجع تكليفاته.');
+    const cost=d=>penalty(cd[t.ci][d]+1,periods)-penalty(cd[t.ci][d],periods)+penalty(sd[t.gi][d]+1,groups[t.gi].limit)-penalty(sd[t.gi][d],groups[t.gi].limit);
+    choices.sort((a,b)=>cost(a)-cost(b)||sd[t.gi][a]-sd[t.gi][b]);move(t,choices[0]);
+   }
   }
-  let score=cd.flat().reduce((n,k)=>n+penalty(k),0)+pd.flat().reduce((n,k)=>n+penalty(k),0),stagnant=0;
-  const move=(t,d)=>{cd[t.ci][t.day]--;pd[t.pi][t.day]--;t.day=d;cd[t.ci][d]++;pd[t.pi][d]++;};
-  const change=(row,a,b)=>penalty(row[a]-1)+penalty(row[b]+1)-penalty(row[a])-penalty(row[b]);
-  for(let iteration=0;score&&iteration<Math.max(3000,tokens.length*35);iteration++){
+  let score=cd.flat().reduce((n,k)=>n+penalty(k,periods),0)+pd.flat().reduce((n,k)=>n+penalty(k,periods),0)+sd.reduce((n,row,gi)=>n+row.reduce((sum,k)=>sum+penalty(k,groups[gi].limit),0),0),stagnant=0;
+  const candidates=(t,consider)=>{
+   for(const d of shuffled(allowed[t.pi],random))if(d!==t.day)consider(d,null);
+   const seen=new Set();
+   for(const id of [...byPerson[t.pi],...byClass[t.ci]]){
+    if(seen.has(id))continue;seen.add(id);const u=tokens[id];
+    if(u.day!==t.day&&allowed[t.pi].includes(u.day)&&allowed[u.pi].includes(t.day))consider(u.day,u);
+   }
+  };
+  const apply=(t,d,u)=>{const a=t.day;move(t,d);if(u)move(u,a);};
+  for(let iteration=0;score&&iteration<Math.max(4000,tokens.length*60);iteration++){
    if(iteration%100===0&&performance.now()>deadline)break;
-   const start=Math.floor(random()*tokens.length);let id=-1;for(let k=0;k<tokens.length;k++){const i=(start+k)%tokens.length,t=tokens[i];if(cd[t.ci][t.day]>periods||pd[t.pi][t.day]>periods){id=i;break;}}if(id<0)break;
-   const t=tokens[id],a=t.day;let best=Infinity,choice=null,ties=0;
-   const consider=(delta,option)=>{if(delta<best){best=delta;choice=option;ties=1;}else if(delta===best&&random()<1/++ties)choice=option;};
-   for(const d of shuffled(allowed[t.pi],random))if(d!==a)consider(change(cd[t.ci],a,d)+change(pd[t.pi],a,d),{day:d});
-   for(const other of byPerson[t.pi]){const u=tokens[other],b=u.day;if(a===b||t.ci===u.ci)continue;consider(change(cd[t.ci],a,b)+change(cd[u.ci],b,a),{swap:other});}
-   for(const other of byClass[t.ci]){const u=tokens[other],b=u.day;if(a===b||t.pi===u.pi||!allowed[t.pi].includes(b)||!allowed[u.pi].includes(a))continue;consider(change(pd[t.pi],a,b)+change(pd[u.pi],b,a),{swap:other});}
+   const start=Math.floor(random()*tokens.length);let t=null;
+   for(let k=0;k<tokens.length;k++){const candidate=tokens[(start+k)%tokens.length];if(cd[candidate.ci][candidate.day]>periods||pd[candidate.pi][candidate.day]>periods||sd[candidate.gi][candidate.day]>groups[candidate.gi].limit){t=candidate;break;}}
+   if(!t)break;
+   let best=Infinity,bestSoft=Infinity,choice=null,ties=0;
+   candidates(t,(d,u)=>{const value=delta(t,d,u);if(value.hard<best||value.hard===best&&value.soft<bestSoft){best=value.hard;bestSoft=value.soft;choice={d,u};ties=1;}else if(value.hard===best&&value.soft===bestSoft&&random()<1/++ties)choice={d,u};});
    if(!choice)break;
-   const temperature=stagnant>100?1.5:.35;if(best<=0||random()<Math.exp(-best/temperature)){
-    if(choice.swap!==undefined){const u=tokens[choice.swap],b=u.day;move(t,b);move(u,a);}else move(t,choice.day);score+=best;
-   }stagnant=best<0?0:stagnant+1;if(stagnant>1800)break;
+   const temperature=stagnant>100?1.5:.4;
+   if(best<=0||random()<Math.exp(-best/temperature)){apply(t,choice.d,choice.u);score+=best;}
+   stagnant=best<0?0:stagnant+1;if(stagnant>2000)break;
   }
-  if(!score){const daily=Array.from({length:5},()=>new Map());for(const t of tokens)daily[t.day].set(t.jobIndex,(daily[t.day].get(t.jobIndex)||0)+1);return daily.map(group=>[...group].map(([i,count])=>({...jobs[i],count})));}
+  if(!score){
+   // Smooth subjects with more than five weekly lessons, retaining all limits.
+   for(let pass=0;pass<6;pass++){
+    let changed=false;
+    for(const t of shuffled(tokens,random)){
+     let best=0,choice=null;
+     candidates(t,(d,u)=>{const value=delta(t,d,u);if(value.hard===0&&value.soft<best){best=value.soft;choice={d,u};}});
+     if(choice){apply(t,choice.d,choice.u);changed=true;}
+    }
+    if(!changed)break;
+   }
+   const daily=Array.from({length:5},()=>new Map());for(const t of tokens)daily[t.day].set(t.jobIndex,(daily[t.day].get(t.jobIndex)||0)+1);
+   return daily.map(group=>[...group].map(([i,count])=>({...jobs[i],count})));
+  }
   if(performance.now()>deadline)break;
  }
- throw new Error('تعذر إيجاد توزيع يلتزم بأيام دوام جميع الأساتذة. جرّب إتاحة أيام أخرى لبعض الأساتذة، أو توزيع تكليفاتهم على كادر إضافي ثم أعد الإنشاء.');
+ throw new Error('تعذر فصل حصص المواد على أيام الأسبوع دون تعارض ضمن إعدادات الدوام الحالية. جرّب إعادة الإنشاء، أو وسّع أيام دوام الكادر أو وزّع بعض التكليفات على أستاذ آخر.');
 }
+
+function lessonSpreadNotes(result){
+ const notes=[];
+ for(const cls of result.classes){
+  const subjects=new Map();
+  for(let d=0;d<days.length;d++)for(const cell of result.data[d][cls.id])if(!cell.unassigned){
+   if(!subjects.has(cell.subject))subjects.set(cell.subject,Array(5).fill(0));subjects.get(cell.subject)[d]++;
+  }
+  for(const [subject,counts]of subjects){const total=counts.reduce((a,b)=>a+b,0);if(total<=days.length&&counts.some(n=>n>1))notes.push(`${cls.title} · ${subject}: ${total} حصص في ${counts.filter(Boolean).length} أيام. أيام دوام الكادر تفرض تكرار المادة؛ أتح أيامًا إضافية أو وزّع بعض حصصها على أستاذ آخر لفصلها.`);}
+ }
+ return notes;
+}
+
 function colorDayLessons(classes,jobs,periods,random){
  const persons=[...new Set(jobs.map(j=>j.personId))],n=Math.max(classes.length,persons.length),matrix=Array.from({length:n},()=>new Map()),left=Array(n).fill(0),right=Array(n).fill(0),ci=new Map(classes.map((c,i)=>[c.id,i])),pi=new Map(persons.map((id,i)=>[id,i]));
  const add=(l,r,count,job=null)=>{if(!count)return;let pair=matrix[l].get(r);if(!pair){pair={count:0,jobs:[]};matrix[l].set(r,pair);}pair.count+=count;if(job)pair.jobs.push({...job,remaining:count});left[l]+=count;right[r]+=count;};
@@ -957,14 +1037,12 @@ function colorDayLessons(classes,jobs,periods,random){
 function createSchedule(config,assignments,random=Math.random){
  validateStaffedWeeklyPlans(config,assignments);
  if(!buildClasses(config).length)throw new Error('فعّل صفًا دراسيًا واحدًا على الأقل قبل إنشاء الجدول.');
- if(assignments.every(t=>teacherDays(t).length===5))return createUnrestrictedSchedule(config,assignments,random);
  const classes=buildClasses(config),allocation=allocateLessonJobs(config,assignments),daily=splitJobsByDay(config,allocation.jobs,assignments,random),periods=getPeriods(config).length,data={};
  for(let d=0;d<5;d++)data[d]=colorDayLessons(classes,daily[d],periods,random);
  for(const cls of classes){
   const gaps=allocation.gaps.filter(g=>g.classId===cls.id).flatMap(g=>Array.from({length:g.count},()=>g));let index=0;
   for(let d=0;d<5;d++)for(let p=0;p<periods;p++)if(!data[d][cls.id][p]){const gap=gaps[index++];if(!gap)throw new Error('تعذر مطابقة الفراغات مع الخطة الأسبوعية.');data[d][cls.id][p]={subject:'',teacher:'',teacherId:'',unassigned:true,plannedSubject:gap.subject,reason:gap.reason};}
  }
- const attendance=new Map(assignments.map(t=>[t.personId||t.id,teacherDays(t)]));spreadScheduleDays(data,classes,periods,attendance);
  const result={version:TIMETABLE_VERSION,classes,data,extraCount:allocation.extraCount,unassigned:allocation.gaps.reduce((n,g)=>n+g.count,0),shortages:allocation.gaps,config:snapshotScheduleConfig(config),signature:scheduleSignature(config,assignments),createdAt:new Date().toISOString()};
  if(!cleanSavedSchedule(result))throw new Error('تعذر التحقق من سلامة الجدول. راجع الحصص وأيام الدوام ثم أعد الإنشاء.');return result;
 }
@@ -1181,10 +1259,11 @@ function generateSchedules(){
  }catch(error){showScheduleErrors(error.issues||[error.message]);}
 }
 function renderGeneratedSchedule(){
- $('extraCoverageResult').hidden=!generated||isStale||!generated.extraCount;
+ $('extraCoverageResult').hidden=!generated||isStale||!generated.extraCount;$('daySpreadNotice').hidden=true;
  $('scheduleEmpty').hidden=!!generated;$('scheduleResult').hidden=!generated||isStale;$('staleNotice').hidden=!generated||!isStale;$('regenerate').querySelector('span').textContent=generated?'إعادة التوليد':'إنشاء الجداول';
  if(!generated||isStale){$('masterTable').innerHTML='';$('subTable').innerHTML='';syncPrintStatus();return;}
  const total=days.length*getPeriods(generated.config).length*generated.classes.length;
+ const spreadNotes=lessonSpreadNotes(generated);$('daySpreadNotice').hidden=!spreadNotes.length;$('daySpreadNotes').innerHTML=spreadNotes.map(note=>`<li>${escapeHTML(note)}</li>`).join('');
  $('resultStats').innerHTML=`<span><strong>${generated.classes.length}</strong>صفوف وشعب</span><span><strong>${total-generated.unassigned}</strong>حصص مسندة</span><span><strong>${generated.unassigned}</strong>حصص فارغة</span>`;
  if(generated.extraCount){$('extraCoverageSummary').textContent=`تفاصيل الإسناد التلقائي · ${generated.extraCount} حصة`;$('extraAssignmentsList').innerHTML=extraAssignmentSummary(generated).map(g=>`<li>${escapeHTML(g.teacher)} · ${escapeHTML(g.subject)} · ${escapeHTML(generated.classes.find(c=>c.id===g.classId)?.title||'')} · ${g.count} حصص</li>`).join('');}
 
@@ -1747,8 +1826,8 @@ async function downloadPdf(){
 }
 
 function initTheme(){
- const apply=theme=>{document.documentElement.dataset.theme=theme;const dark=theme==='dark';$('themeToggle').textContent=dark?'☀':'☾';$('themeToggle').setAttribute('aria-pressed',String(dark));$('themeToggle').setAttribute('aria-label',dark?'تفعيل الوضع الفاتح':'تفعيل الوضع الداكن');document.querySelector('meta[name="theme-color"]').content=dark?'#101c19':'#176b5b';};
- apply(document.documentElement.dataset.theme||'light');$('themeToggle').onclick=()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';apply(next);try{localStorage.setItem('jadwali-theme',next)}catch{toast('تغير المظهر لهذه الجلسة. تعذر حفظ التفضيل.')}};
+ const apply=theme=>{document.documentElement.dataset.theme=theme;const dark=theme==='dark';$('themeToggle').textContent=dark?'☀':'☾';const label=dark?'تفعيل الوضع الفاتح':'تفعيل الوضع المظلم';$('themeToggle').setAttribute('aria-pressed',String(dark));$('themeToggle').setAttribute('aria-label',label);$('themeToggle').title=label;document.querySelector('meta[name="theme-color"]').content=dark?'#17121f':'#fff5e9';};
+ apply(document.documentElement.dataset.theme||'dark');$('themeToggle').onclick=()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';apply(next);try{localStorage.setItem('jadwali-halloween-theme',next)}catch{toast('تغير المظهر لهذه الجلسة. تعذر حفظ التفضيل.')}};
 }
 function updateTeacherHint(){
  const workDays=selectedTeacherDays(),capacity=workDays.length*getPeriods(state).length;
